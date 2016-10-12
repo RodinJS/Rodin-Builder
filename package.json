@@ -1,0 +1,47 @@
+{
+  "name": "socketservice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "async": "^2.0.1",
+    "body-parser": "^1.15.2",
+    "child_process": "^1.0.2",
+    "cli-table": "^0.3.1",
+    "cors": "^2.8.1",
+    "express": "^4.14.0",
+    "fs-extra": "^0.30.0",
+    "helmet": "^2.1.3",
+    "lwip": "0.0.9",
+    "method-override": "^2.3.6",
+    "minimist": "^1.2.0",
+    "mongoose": "^4.6.0",
+    "morgan": "^1.7.0",
+    "multer": "^1.2.0",
+    "node-cron": "^1.1.2",
+    "opentok": "^2.3.2",
+    "path": "^0.12.7",
+    "request": "^2.75.0",
+    "socket.io": "^1.4.8",
+    "winston": "^2.2.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-apidoc": "^0.2.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "appGenerate": "node scriptes/generateApp.js",
+    "appList": "node scriptes/listApps.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gormat/socketService.git"
+  },
+  "author": "gormatevosyan14@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gormat/socketService/issues"
+  },
+  "homepage": "https://github.com/gormat/socketService#readme"
+}

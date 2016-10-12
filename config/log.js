@@ -1,0 +1,1 @@
+module.exports.maxsize = 10485760; // 10 MB
