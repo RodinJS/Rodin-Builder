@@ -6,9 +6,36 @@ const cors = require("cors");
 const methodOverride = require('method-override');
 const morgan = require("morgan");
 const path = require("path");
-const configs = require('./config/config');
 const async = require('async');
+const minimist = require('minimist');
+const configs = require('./config/config');
 
+let platform = "";
+const argv = minimist(process.argv.slice(2));
+
+switch (true) {
+    case argv.ios:
+        platform = "ios";
+        break;
+
+    case argv.android:
+        platform = "ios";
+        break;
+
+    case argv.oculus:
+        platform = "ios";
+        break;
+
+    case argv.vive:
+        platform = "ios";
+        break;
+
+    default:
+        throw new Error('Unsupported platform');
+        break;
+}
+
+configs.setup(platform);
 const app = express();
 
 /**

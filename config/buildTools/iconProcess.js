@@ -1,7 +1,7 @@
 const async = require('async');
 const lwip = require("lwip");
 const path = require('path');
-const configs = require("../config/config");
+const configs = require("../config");
 
 let resizeImage = (inputPath, outputPath, x, y, cb) => {
     lwip.open(inputPath, (err, image) => {

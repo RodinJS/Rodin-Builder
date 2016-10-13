@@ -4,7 +4,7 @@ const configs = require('../config/config');
 const path = require('path');
 const request = require('request');
 const child_process = require('child_process');
-const iconProcess = require('./iconProcess');
+const iconProcess = require('./../config/buildTools/iconProcess');
 
 const MongoConnection = require('../mongoose/connection');
 const UserApp = MongoConnection.model('UserApp');
