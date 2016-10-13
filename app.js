@@ -1,5 +1,4 @@
 const express = require("express");
-const SIGINT = require("./utils/sigint");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const cors = require("cors");
@@ -55,10 +54,10 @@ if (configs.envirement.development) {
 
 const connectDB = cb => {
     const connection = require('./mongoose/connection');
-    connection.once('open', () => {
+    connection['once']('open', () => {
         require('./mongoose/models')(connection);
         cb();
-    })
+    });
 };
 
 async.parallel(
