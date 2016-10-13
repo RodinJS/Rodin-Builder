@@ -10,7 +10,7 @@ class Builder {
     }
 
     init(cb) {
-        console.log(this);
+        console.log('this in init', this);
         const project = this.project;
         if (project.canceled)
             return cb('cancelled');

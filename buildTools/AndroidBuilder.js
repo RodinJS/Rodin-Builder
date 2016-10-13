@@ -13,7 +13,6 @@ class AndroidBuilder extends Builder {
     }
 
     clean(cb) {
-        console.log(this.project);
         const project = this.project;
         if (project.canceled)
             return cb('cancelled');
