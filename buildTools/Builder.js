@@ -7,7 +7,6 @@ const configs = require('../config/config');
 class Builder {
     constructor(project) {
         this.project = project;
-        console.log(this.project);
     }
 
     init(cb) {
