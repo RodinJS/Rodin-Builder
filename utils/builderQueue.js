@@ -36,7 +36,7 @@ class BuilderQueue {
 
         async.series(
             [
-                builder.init,
+                builder.init.bind(builder),
                 builder.copyTemplate,
                 builder.clean,
                 builder.setupBuild,
