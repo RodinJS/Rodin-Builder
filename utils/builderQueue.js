@@ -34,7 +34,9 @@ class BuilderQueue {
 
         const buildSeries = buildTools.createInstance(project).buildSeries();
 
-        let functions = buildSeries.map( fn => (cb) => fn(cb));
+        buildSeries[0]();
+
+        console.log('kanchec');
 
         async.series(
             functions,
