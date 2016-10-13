@@ -34,8 +34,10 @@ class BuilderQueue {
 
         const buildSeries = buildTools.createInstance(project).buildSeries();
 
+        let functions = buildSeries.map( fn => (cb) => fn(cb));
+
         async.series(
-            buildSeries,
+            functions,
             err => {
 
                 if (err) {
