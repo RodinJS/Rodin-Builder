@@ -33,7 +33,7 @@ class BuilderQueue {
         console.log('build start');
 
         const builder = buildTools.createInstance(project);
-        const series = builder.buildSeries();
+        const series = builder.buildSeries().map( f => cb => f(cb));
 
         async.series(
             series,
