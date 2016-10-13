@@ -5,9 +5,11 @@ router.get('/', (req, res) => {
     const emitter = new Emitter(req, res);
 
     let buildStatus = req.project.built || false;
+    let error = req.project.error || {};
     return emitter.sendData(
         {
-            buildStatus: buildStatus
+            buildStatus: buildStatus,
+            error: error
         }
     );
 });

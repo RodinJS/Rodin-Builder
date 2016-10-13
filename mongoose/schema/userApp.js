@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const configs = require('../../config/config');
 const UniqueID = require('../../utils/UniqueID');
 const Schema = mongoose.Schema;
-const UniqueId = require('../../utils/UniqueID');
 
 const userSchema = new Schema(
     {
@@ -10,21 +9,22 @@ const userSchema = new Schema(
             type: String,
             required: true
         },
+
         appId: {
             type: String,
             required: true
         },
-        uuid: String,
-        uuName: String,
 
         appName: {
             type: String,
             required: true
         },
+
         version: {
             type: String,
             default: "1.0"
         },
+
         url: {
             type: String,
             required: true
@@ -35,14 +35,62 @@ const userSchema = new Schema(
         },
 
         buildId: String,
+
+        buildStatus: {
+            type: Boolean,
+            default: false
+        },
+
         downloadUrl: String,
+
+        ios: {
+            developerId: String,
+            certPassword: String,
+            uuid: String,
+            uuName: String,
+            uuDevelopmentTeam: String,
+            bundleIdentifier: String,
+            exportMethod: String
+        },
+
+        android: {
+            package: String,
+            iconPath: String,
+            keyStore: {
+                name: {
+                    type: String,
+                    default: UniqueID.v16
+                },
+                password: {
+                    type: String,
+                    required: true
+                },
+                firstLastName: String,
+                organization: String,
+                city: String,
+                state: String,
+                countryCode: String,
+                alias: {
+                    type: String,
+                    default: UniqueID.v16
+                },
+                aliasPassword: {
+                    type: String,
+                    required: true
+                }
+            }
+        },
 
         vive: {
             package: String,
             iconPath: String,
-            keyStore: {
+            keyStore: {}
+        },
 
-            }
+        oculus: {
+            package: String,
+            iconPath: String,
+            keyStore: {}
         }
     }
 );
