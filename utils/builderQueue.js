@@ -32,6 +32,8 @@ class BuilderQueue {
         this.busy = true;
         console.log('build start');
 
+        console.log(buildTools.createInstance(project).buildSeries());
+
         async.series(
             buildTools.createInstance(project).buildSeries(),
             err => {
