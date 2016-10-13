@@ -39,7 +39,7 @@ class BuilderQueue {
         console.log('kanchec');
 
         async.series(
-            functions,
+            buildSeries,
             err => {
 
                 if (err) {
