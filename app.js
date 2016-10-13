@@ -19,15 +19,15 @@ switch (true) {
         break;
 
     case argv['android']:
-        platform = "ios";
+        platform = "android";
         break;
 
     case argv['oculus']:
-        platform = "ios";
+        platform = "oculus";
         break;
 
     case argv['vive']:
-        platform = "ios";
+        platform = "vive";
         break;
 
     default:
@@ -73,8 +73,8 @@ async.parallel(
 
         require("./routes/setupRoutes")(app);
         require("./utils/binSender").run();
-        const port = argv.p || configs.server.port;
-        const server = app.listen(port, '0.0.0.0', () => {
+        const port = argv['p'] || configs.server.port;
+        app.listen(port, '0.0.0.0', () => {
             console.log(`Server running on port ${port}`);
         });
     }

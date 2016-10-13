@@ -1,5 +1,33 @@
-const Connection = require('../mongoose/connection');
 const argv = require('minimist')(process.argv.slice(2));
+const configs = require('../config/config');
+
+let platform = "";
+
+switch (true) {
+    case argv['ios']:
+        platform = "ios";
+        break;
+
+    case argv['android']:
+        platform = "android";
+        break;
+
+    case argv['oculus']:
+        platform = "oculus";
+        break;
+
+    case argv['vive']:
+        platform = "vive";
+        break;
+
+    default:
+        throw new Error('Unsupported platform');
+        break;
+}
+
+configs.setup(platform);
+
+const Connection = require('../mongoose/connection');
 Connection.once('open', () => {
     require('../mongoose/models')(Connection);
     generate();
