@@ -41,8 +41,15 @@ class BuildError extends CustomError {
     }
 }
 
+class CleanError extends CustomError {
+    constructor(stdout, stderr) {
+        super('Clean Error', 'clean', {stdout: stdout, stderr: stderr});
+    }
+}
+
 module.exports.FileReadError = FileReadError;
 module.exports.FileWriteError = FileWriteError;
 module.exports.MKDIRError = MKDIRError;
 module.exports.CopyError = CopyError;
 module.exports.BuildError = BuildError;
+module.exports.CleanError = CleanError;
