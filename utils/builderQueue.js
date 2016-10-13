@@ -32,7 +32,8 @@ class BuilderQueue {
         this.busy = true;
         console.log('build start');
 
-        const buildSeries = buildTools.createInstance(project).buildSeries();
+        const buildSeries = buildTools.createInstance(project);
+        console.log('text', buildSeries);
 
         buildSeries[0]();
 
