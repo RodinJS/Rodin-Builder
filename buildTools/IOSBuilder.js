@@ -13,24 +13,6 @@ class IOSBuilder extends Builder {
         super(project);
     }
 
-    clean(cb) {
-        const project = this.project;
-        if (project.canceled)
-            return cb('cancelled');
-
-        child_process.exec('./gradlew clean', {cwd: project.projectPath}, (err, stdout, stderr) => {
-            if (stdout.match(new RegExp('BUILD SUCCESSFUL'))) {
-                project.built = 'success';
-                console.log(`build status: ${project.built}`);
-                return cb();
-            }
-
-            project.built = 'failed';
-            console.log(`build status: ${project.built}`);
-            return cb(new errors.CleanError(stdout, stderr));
-        });
-    }
-
     setupBuild(cb) {
         const project = this.project;
         if (project.canceled)
@@ -167,17 +149,16 @@ class IOSBuilder extends Builder {
 
         const ipaName = `app-rodin-release-${Date.now()}`;
         child_process.exec(`sh build.sh ${ipaName} ${project.projectPath}`, {cwd: path.join(configs.builder.userDir, configs.builder.projectsDir)}, (err, stdout, stderr) => {
-            if (err || stdout.match(new RegExp('EXPORT FAILED'))) {
-                project.built = 'failed';
-            } else if (stdout.match(new RegExp('EXPORT SUCCEEDED'))) {
+            if (stdout.match(new RegExp('EXPORT SUCCEEDED'))) {
                 project.built = 'success';
-            } else {
-                project.built = 'unknown';
+                project.binaryPath = path.join(project.projectPath, configs.builder.buildDir, 'app-rodin-release.apk');
+                console.log(`build status: ${project.built}`);
+                return cb();
             }
 
-            console.log(`build status ${project.built}`);
-            project.binPath = path.join(project.projectPath, configs.builder.buildDir, 'Rodin.ipa');
-            return cb();
+            project.built = 'failed';
+            console.log(`build status: ${project.built}`);
+            return cb(new errors.BuildError(stdout, stderr));
         });
     }
 }
