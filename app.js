@@ -14,19 +14,19 @@ let platform = "";
 const argv = minimist(process.argv.slice(2));
 
 switch (true) {
-    case argv.ios:
+    case argv['ios']:
         platform = "ios";
         break;
 
-    case argv.android:
+    case argv['android']:
         platform = "ios";
         break;
 
-    case argv.oculus:
+    case argv['oculus']:
         platform = "ios";
         break;
 
-    case argv.vive:
+    case argv['vive']:
         platform = "ios";
         break;
 
