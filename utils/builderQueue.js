@@ -46,6 +46,7 @@ class BuilderQueue {
                 builder.rename.bind(builder)
             ],
             err => {
+                this.busy = false;
 
                 if (err) {
                     if (!this.isEmpty()) {
@@ -66,7 +67,6 @@ class BuilderQueue {
                         }
                     },
                     err => {
-                        this.busy = false;
                         console.log('built');
 
                         if (!this.isEmpty()) {
