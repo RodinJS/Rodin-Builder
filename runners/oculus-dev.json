@@ -1,0 +1,7 @@
+{
+  "name"        : "builder oculus development",
+  "script"      : "app.js",
+  "instances"   : "1",
+  "exec_mode"   : "cluster",
+  "args"        : ["--oculus", "-p 10002"]
+}

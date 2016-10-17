@@ -1,0 +1,7 @@
+{
+  "name"        : "builder android development",
+  "script"      : "app.js",
+  "instances"   : "1",
+  "exec_mode"   : "cluster",
+  "args"        : ["--android", "-p 10001"]
+}

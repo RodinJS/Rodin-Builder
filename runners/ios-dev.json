@@ -1,0 +1,7 @@
+{
+  "name"        : "builder ios development",
+  "script"      : "app.js",
+  "instances"   : "1",
+  "exec_mode"   : "cluster",
+  "args"        : ["--ios", "-p 10000"]
+}
