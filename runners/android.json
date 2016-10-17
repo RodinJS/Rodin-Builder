@@ -1,6 +1,6 @@
 {
   "name"        : "builder android production",
-  "script"      : "../app.js",
+  "script"      : "app.js",
   "instances"   : "1",
   "exec_mode"   : "cluster",
   "args"        : ["--android", "-p 10001"]
