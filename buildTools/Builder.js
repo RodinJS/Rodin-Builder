@@ -44,7 +44,7 @@ class Builder {
             return cb('cancelled');
 
         fs.copy(project.tempProjectPath, project.projectPath, (err) => {
-            if(err) {
+            if (err) {
                 return cb(new errors.CopyError(project.tempProjectPath, project.projectPath, 'copy'));
             }
 
@@ -70,20 +70,20 @@ class Builder {
     }
 
     rename(cb) {
-        return cb();
+        const oldPath = this.project.bin.path;
+        const newPath = path.join(path.dirname(oldPath), this.project.name + path.extname(oldPath));
+        fs.rename(oldPath, newPath, err => {
+            if(err) {
+                return cb(err);
+            }
+
+            this.project.bin.path = newPath;
+            return cb();
+        });
     }
 
-    buildSeries() {
-        return [
-            this.init,
-            this.copyTemplate,
-            this.clean,
-            this.setupBuild,
-            this.setupProject,
-            iconProcess(this.project),
-            this.build,
-            this.rename
-        ]
+    iconProcess(cb) {
+        return iconProcess(this.project)(cb);
     }
 }
 

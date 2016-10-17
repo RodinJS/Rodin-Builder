@@ -37,13 +37,13 @@ class BuilderQueue {
         async.series(
             [
                 builder.init.bind(builder),
-                builder.copyTemplate,
-                builder.clean,
-                builder.setupBuild,
-                builder.setupProject,
-                // iconProcess(this.project),
-                builder.build,
-                builder.rename
+                builder.copyTemplate.bind(builder),
+                builder.clean.bind(builder),
+                builder.setupBuild.bind(builder),
+                builder.setupProject.bind(builder),
+                builder.iconProcess.bind(builder),
+                builder.build.bind(builder),
+                builder.rename.bind(builder)
             ],
             err => {
 

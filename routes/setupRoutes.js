@@ -54,6 +54,10 @@ module.exports = app => {
             {
                 name: 'profile',
                 maxCount: 1
+            },
+            {
+                name: 'keyStore',
+                maxCount: 1
             }
         ]
     ));
