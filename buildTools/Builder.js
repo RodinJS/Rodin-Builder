@@ -71,7 +71,7 @@ class Builder {
 
     rename(cb) {
         const oldPath = this.project.binaryPath;
-        const newPath = path.join(path.dirname(oldPath), this.project.name + path.extname(oldPath));
+        const newPath = path.join(path.dirname(oldPath), this.project.appName + path.extname(oldPath));
         fs.rename(oldPath, newPath, err => {
             if(err) {
                 return cb(err);
