@@ -77,7 +77,7 @@ class Builder {
                 return cb(err);
             }
 
-            this.project.bin.path = newPath;
+            this.project.binaryPath = newPath;
             return cb();
         });
     }
