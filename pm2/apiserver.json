@@ -1,0 +1,5 @@
+{
+  "name"        : "apidoc server",
+  "script"      : "app.js",
+  "args"        : ["-p 9003"]
+}
