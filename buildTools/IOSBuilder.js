@@ -151,7 +151,7 @@ class IOSBuilder extends Builder {
         child_process.exec(`sh build.sh ${ipaName} ${project.projectPath}`, {cwd: path.join(configs.builder.userDir, configs.builder.projectsDir)}, (err, stdout, stderr) => {
             if (stdout.match(new RegExp('EXPORT SUCCEEDED'))) {
                 project.built = 'success';
-                project.binaryPath = path.join(project.projectPath, configs.builder.buildDir, 'app-rodin-release.apk');
+                project.binaryPath = path.join(project.projectPath, configs.builder.buildDir, 'Rodin.ipa');
                 console.log(`build status: ${project.built}`);
                 return cb();
             }
