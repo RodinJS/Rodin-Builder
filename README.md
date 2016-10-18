@@ -2,8 +2,7 @@
 
 ## API
 
-Check api documentation at .
-
+Check api documentation [here](http://45.55.92.49:8001/apidoc/)
 ## Setup and Run
 
 #### 1. Clone this repo 
