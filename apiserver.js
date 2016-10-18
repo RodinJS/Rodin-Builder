@@ -23,7 +23,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(express.static(path.join(__dirname + '/public')));
 
-app.use(morgan("dev"));
+app.use('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'apidoc', 'index.html'));
+});
 
 const port = argv.p || argv.port || 8080;
 app.listen(port, '0.0.0.0', () => {
