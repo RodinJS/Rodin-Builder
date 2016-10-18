@@ -23,6 +23,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(express.static(path.join(__dirname + '/public')));
 
+app.use(morgan("dev"));
+
 const port = argv.p || argv.port || 8080;
 app.listen(port, '0.0.0.0', () => {
     console.log(`Server running on port ${port}`);
