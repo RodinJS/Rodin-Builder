@@ -52,7 +52,7 @@ node app.js --vive -p 10000
 ```
 
 #### 5. Running with ```pm2```
-There are specific json files id directory ```./pm2``` for running with pm2 and cluster mode. 
+There are specific json files in directory ```./pm2``` for running with pm2 and cluster mode. 
 Change ports and run
 
 IOS development and production modes
