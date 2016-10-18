@@ -66,10 +66,7 @@ const userSchema = new Schema(
                     type: String,
                     default: UniqueID.v16
                 },
-                password: {
-                    type: String,
-                    required: true
-                },
+                password: String,
                 firstLastName: String,
                 organization: String,
                 city: String,
@@ -79,10 +76,7 @@ const userSchema = new Schema(
                     type: String,
                     default: UniqueID.v16
                 },
-                aliasPassword: {
-                    type: String,
-                    required: true
-                }
+                aliasPassword: String
             }
         },
 
