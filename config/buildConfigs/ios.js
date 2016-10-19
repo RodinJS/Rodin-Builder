@@ -32,8 +32,8 @@ module.exports.imageSizes = {
         path: "Rodin/Assets.xcassets/AppIcon.appiconset/xxh.png"
     },
     XXXH: {
-        x: 76,
-        y: 76,
+        x: 83.5,
+        y: 83.5,
         path: "Rodin/Assets.xcassets/AppIcon.appiconset/xxxh.png"
     }
 };
