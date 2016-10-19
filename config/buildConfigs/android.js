@@ -33,6 +33,33 @@ module.exports.imageSizes = {
     }
 };
 
+module.exports.imageSizes = [
+    {
+        width: 48,
+        height: 48,
+        path: "app/src/main/res/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        width: 72,
+        height: 72,
+        path: "app/src/main/res/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        width: 96,
+        height: 96,
+        path: "app/src/main/res/mipmap-xhdpi/ic_launcher.png"
+    }, {
+        width: 144,
+        height: 144,
+        path: "app/src/main/res/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        width: 192,
+        height: 192,
+        path: "app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
+    }
+];
+
 module.exports.cron = {
     binSender: "* * * * *"
 };

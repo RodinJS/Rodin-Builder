@@ -41,25 +41,4 @@ module.exports = project => cb => {
             return cb();
         }
     );
-
-    // async.series(
-    //     [
-    //         done => {
-    //             const size = configs.builder.imageSizes.XXXH;
-    //             resizeImage(image.path, path.join(project.projectPath, size.path), size.x, size.y, err => {
-    //                 if(!err) {
-    //                     console.log("icon success: xxxh");
-    //                 }
-    //                 return done(err);
-    //             });
-    //         },
-    //     ],
-    //     err => {
-    //         if (err) {
-    //             return cb(err);
-    //         }
-    //
-    //         return cb();
-    //     }
-    // )
 };
