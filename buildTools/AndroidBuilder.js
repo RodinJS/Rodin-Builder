@@ -36,8 +36,21 @@ class AndroidBuilder extends Builder {
             return cb('cancelled');
 
         const keyStore = project.android.keyStore;
-        const command = `keytool -genkey -noprompt -alias ${keyStore.alias} -keypass ${keyStore.aliasPassword} -keystore ${keyStore.name}.keystore -storepass ${keyStore.password} -dname "CN=mqttserver.ibm.com, OU=ID, O=IBM, L=Hursley, S=Hants, C=GB"`;
-        child_process.exec(command, {cwd: project.projectPath}, (err, stdout, stderr) => {
+
+        const cmdParams = [
+            `-genkey`,
+            `-noprompt`,
+            `-alias ${keyStore.alias}`,
+            `-keypass ${keyStore.aliasPassword}`,
+            `-keystore ${keyStore.name}.keystore`,
+            `-storepass ${keyStore.password}`,
+            `-dname "CN=mqttserver.ibm.com, OU=ID, O=IBM, L=Hursley, S=Hants, C=GB"`
+        ];
+        const cmd = `keytool ${cmdParams.join(" ")}`;
+
+        child_process.exec(cmd, {cwd: project.projectPath}, (err, stdout, stderr) => {
+            console.log('stdout', stdout);
+            console.log('stderr', stderr);
             console.log('keyStore generate success');
             project.keyStorePath = path.join(project.projectPath, `${keyStore.name}.keystore`);
             return cb();
