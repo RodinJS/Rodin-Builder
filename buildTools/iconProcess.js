@@ -22,9 +22,7 @@ let resizeImage = (inputPath, outputPath, x, y, cb) => {
 module.exports = project => cb => {
 
     const images = Object.keys(project.files).filter(i => i.indexOf('icon') !== -1);
-    console.log('images', images);
-    const image = project.files[images[0]];
-    console.log(project.files[images[0]]);
+    const image = project.files[images[0]][0];
 
     async.mapLimit(configs.builder.imageSizes, 10,
         (imageSize, innerCb) => {
