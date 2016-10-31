@@ -20,8 +20,6 @@ let resizeImage = (inputPath, outputPath, x, y, cb) => {
 };
 
 module.exports = project => cb => {
-
-
     if (configs.builder.imageSizes.length === 0) {
         return cb();
     }
