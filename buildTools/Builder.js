@@ -27,7 +27,6 @@ class Builder {
                 console.log(`removing folder: ${projectPath}`);
                 fs.remove(projectPath);
                 console.log(`folder removed: ${projectPath}`);
-                return cb();
             }
 
             fs.mkdirp(projectPath, err => {
@@ -48,7 +47,6 @@ class Builder {
 
         fs.copy(project.tempProjectPath, project.projectPath, (err) => {
             if (err) {
-                console.log(err);
                 return cb(new errors.CopyError(project.tempProjectPath, project.projectPath, 'copy'));
             }
 
