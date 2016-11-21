@@ -48,6 +48,7 @@ class Builder {
 
         fs.copy(project.tempProjectPath, project.projectPath, (err) => {
             if (err) {
+                console.log(err);
                 return cb(new errors.CopyError(project.tempProjectPath, project.projectPath, 'copy'));
             }
 
