@@ -23,9 +23,8 @@ class Builder {
 
         fs.stat(projectPath, (err, status) => {
             if (status) {
-                console.log(`folder exists: ${projectPath}`);
                 console.log(`removing folder: ${projectPath}`);
-                fs.remove(projectPath);
+                fs.removeSync(projectPath);
                 console.log(`folder removed: ${projectPath}`);
             }
 
