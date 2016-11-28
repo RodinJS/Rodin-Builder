@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const configs = require('../config/config');
 const Logger = require('../logger/Logger');
 
-const logger = new Logger(`${configs.platform}`, configs.envirement.development);
+const logger = new Logger(`${configs.platform}-${configs.envirement.mode()}`, configs.envirement.development);
 
 const MongoConnection = require('../mongoose/connection');
 const UserApp = MongoConnection.model('UserApp');
