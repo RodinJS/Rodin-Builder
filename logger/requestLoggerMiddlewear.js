@@ -1,7 +1,8 @@
 "use strict";
+const configs = require('../config/config');
 
 const Logger = require("./Logger");
-let logger = new Logger("api/requests.log", false);
+let logger = new Logger(`api/${configs.platform}-${configs.envirement.mode()}.log`, false);
 
 module.exports = function (req, res, next) {
 
