@@ -60,6 +60,7 @@ class BuilderQueue {
                     {
                         $set: {
                             built: true,
+                            sent: false,
                             buildId: project.buildId,
                             bin: {
                                 path: path.join(project.binaryPath)
