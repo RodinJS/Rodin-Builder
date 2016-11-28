@@ -3,6 +3,9 @@ const async = require('async');
 const request = require('request');
 const fs = require('fs-extra');
 const configs = require('../config/config');
+const Logger = require('../logger/Logger');
+
+const logger = new Logger(`${configs.platform}`, configs.envirement.development);
 
 const MongoConnection = require('../mongoose/connection');
 const UserApp = MongoConnection.model('UserApp');
@@ -13,24 +16,22 @@ const send = (app, cb) => {
             method: 'POST',
             preambleCRLF: true,
             postambleCRLF: true,
-            uri: app.responseURL,
-            multipart: [
-                {
-                    'content-type': configs.builder.binContentType,
-                    body: fs.createReadStream(app.bin.path)
-                }
-            ],
+            uri: `configs.binSender.url/${app.appId}/${configs.platform}`,
             json: {
-                userId: app.userId,
-                appId: app.appId
+                buildId: app.buildId,
+                built: app.built
+            },
+            headers: {
+                'x-access-token': configs.binSender.token
             }
         },
         (err, response, body) => {
-            if (err) {
+            if (err || response.statusCode !== 200) {
                 return cb(err);
             }
 
             app.sent = true;
+            logger.info(`project with ${app.appId} sent`);
             return app.save(err => {
                 return cb();
             });
@@ -53,7 +54,7 @@ const sendResponse = () => {
                 return 0;
             }
 
-            console.log(`sending ${apps.length} files`);
+            logger.info(`sending ${apps.length} files`);
             let sentCount = 0;
             async.eachLimit(apps, 10,
                 (app, cb) => {
@@ -65,7 +66,7 @@ const sendResponse = () => {
                     })
                 },
                 err => {
-                    console.log(`files sent: ${sentCount}`);
+                    logger.info(`files sent: ${sentCount}`);
                 }
             );
         }

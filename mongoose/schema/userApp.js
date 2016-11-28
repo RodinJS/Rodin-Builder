@@ -39,6 +39,11 @@ const userSchema = new Schema(
             default: false
         },
 
+        sent: {
+            type: Boolean,
+            default: false
+        },
+
         buildId: String,
 
         buildStatus: {
