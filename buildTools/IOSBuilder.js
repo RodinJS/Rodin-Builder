@@ -95,6 +95,7 @@ class IOSBuilder extends Builder {
 
             content = content.replace('REPLACE_URL', project.url);
             content = content.replace('REPLACE_NAME', project.appName);
+            content = content.replace('REPLACE_VERSION_STRING', project.version);
 
             fs.writeFile(plistFilePath, content, 'utf-8', (err) => {
                 if (err) {
