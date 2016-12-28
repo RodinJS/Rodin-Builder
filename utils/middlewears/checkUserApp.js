@@ -8,13 +8,13 @@ const UserApp = MongoConnection.model('UserApp');
 module.exports = (req, res, next) => {
     const emitter = new Emitter(req, res);
 
-    if(!req.body.project) {
+    if (!req.body.project) {
         return emitter.sendError(new CustomErrors.InvalidRequestData());
     }
 
     const project = JSON.parse(req.body.project);
 
-    if (!project.appId || !project.userId ) {
+    if (!project.appId || !project.userId) {
         return emitter.sendError(new CustomErrors.InvalidRequestData());
     }
 
@@ -28,9 +28,14 @@ module.exports = (req, res, next) => {
                 return emitter.sendError(new CustomErrors.InvalidRequestData());
             }
 
-            userApp = new UserApp(project);
+            if (!userApp)
+                userApp = new UserApp(project);
+            else
+                for (let i in project)
+                    if (project.hasOwnProperty(i))
+                        userApp[i] = project[i];
+
             userApp.save((err, userApp) => {
-                console.log(err);
                 if (err) {
                     return emitter.sendError(new CustomErrors.InvalidRequestData());
                 }
