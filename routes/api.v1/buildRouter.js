@@ -79,6 +79,7 @@ router.post('/', (req, res) => {
     project.responseURL = req.app.responseURL;
     project.files = req.files;
     project.buildId = UniqueID.v16();
+    console.log(project);
 
     builderQueue.requestBuild(project, (err, status) => {
         if (err) {
