@@ -7,6 +7,7 @@ const UserApp = MongoConnection.model('UserApp');
 
 module.exports = (req, res, next) => {
     const emitter = new Emitter(req, res);
+    console.log('mtav');
 
     if (!req.body.project) {
         return emitter.sendError(new CustomErrors.InvalidRequestData());
@@ -37,8 +38,10 @@ module.exports = (req, res, next) => {
 
             userApp.save((err, userApp) => {
                 if (err) {
+                    console.log(err);
                     return emitter.sendError(new CustomErrors.InvalidRequestData());
                 }
+
                 req.userApp = userApp;
                 return next();
             })
