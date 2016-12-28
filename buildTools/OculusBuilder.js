@@ -19,9 +19,10 @@ class OculusBuilder extends Builder {
 
         const jsonFilePath = path.join(project.projectPath, "RodinData", "config.json");
         project.jsonFilePath = "RodinData/config.json";
+        let splitedUrl = project.url.split('/').filter(i => i !== '');
         const content = JSON.stringify({
-            "appName": project.appName,
-            "appUrl": project.url
+            "appname": splitedUrl[splitedUrl.length - 1],
+            "username": splitedUrl[splitedUrl.length - 2]
         });
 
         fs.writeFile(jsonFilePath, content, 'utf-8', (err) => {
