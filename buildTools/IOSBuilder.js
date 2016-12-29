@@ -52,12 +52,12 @@ class IOSBuilder extends Builder {
                             return done(err);
                         }
 
-                        project.ios.uuid = configs.builder.uuidRegExp.exec(content)[1];
-                        configs.builder.uuidRegExp.lastIndex = 0;
-                        project.ios.uuName = configs.builder.uuNameRegExp.exec(content)[1];
-                        configs.builder.uuNameRegExp.lastIndex = 0;
-                        project.ios.uuDevelopmentTeam = configs.builder.uuDevelopmentTeamRegExp.exec(content)[1];
-                        configs.builder.uuDevelopmentTeamRegExp.lastIndex = 0;
+                        let uuidRegExp = new RegExp(configs.builder.uuidRegExp);
+                        let uuNameRegExp = new RegExp(configs.builder.uuNameRegExp);
+                        let uuDevelopmentTeamRegExp = new RegExp(configs.builder.uuDevelopmentTeamRegExp);
+                        project.ios.uuid = uuidRegExp.exec(content)[1];
+                        project.ios.uuName = uuNameRegExp.exec(content)[1];
+                        project.ios.uuDevelopmentTeam = uuDevelopmentTeamRegExp.exec(content)[1];
 
                         fs.copy(profile.path, path.join(path.join(configs.builder.userDir, configs.builder.libDir), project.ios.uuid + '.mobileprovision'), err => {
                             if (err) {
