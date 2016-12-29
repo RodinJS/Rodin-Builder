@@ -10,6 +10,7 @@ const logger = new Logger(`${configs.platform}-${configs.envirement.mode()}.log`
 const MongoConnection = require('../mongoose/connection');
 const UserApp = MongoConnection.model('UserApp');
 
+console.log(configs.envirement);
 const send = (app, cb) => {
     request(
         {
