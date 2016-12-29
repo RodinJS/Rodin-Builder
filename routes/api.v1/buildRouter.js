@@ -8,6 +8,7 @@ const Emitter = require('../../utils/emitter');
 const UniqueID = require('../../utils/UniqueID');
 const CustomErrors = require('../../utils/errors');
 const builderQueue = require('../../utils/builderQueue');
+const checkUserApp = require('../../utils/middlewears/checkUserApp');
 
 
 const MongoConnection = require('../../mongoose/connection');
@@ -72,7 +73,7 @@ const App = MongoConnection.model('App');
  *          }
  *      }
  */
-router.post('/', (req, res) => {
+router.post('/', checkUserApp.build, (req, res) => {
     const emitter = new Emitter(req, res);
 
     const project = req.userApp.toObject();
@@ -94,7 +95,7 @@ router.post('/', (req, res) => {
 
 
 /**
- * @api {post} /api/v1/project Request Build Project
+ * @api {delete} /api/v1/project Request Build Project
  * @apiName Build Project
  * @apiGroup Project
  *
@@ -137,7 +138,7 @@ router.post('/', (req, res) => {
  *          }
  *      }
  */
-router.delete('/', (req, res) => {
+router.delete('/', checkUserApp.cancel, (req, res) => {
     const emitter = new Emitter(req, res);
 
     if(builderQueue.removeByBuildID(req.body.buildId)) {

@@ -3,7 +3,6 @@ const multer = require('multer');
 
 const requestLogger = require('../logger/requestLoggerMiddlewear');
 const checkAppSecret = require('../utils/middlewears/checkAppSecret');
-const checkUserApp = require('../utils/middlewears/checkUserApp');
 const projectByBuildId = require('../utils/middlewears/projectByBuildId');
 const projectByDownloadUrl = require('../utils/middlewears/projectByDownloadUrl');
 const UniqueID = require('../utils/UniqueID');
@@ -68,7 +67,7 @@ module.exports = app => {
     app.use('/api/v1/app', require('./api.v1/appRouter'));
     app.use('/api/v1/status/:buildId', projectByBuildId, require('./api.v1/projectStatusRouter'));
     app.use('/api/v1/project/:buildId', projectByBuildId, require('./api.v1/projectRouter'));
-    app.use('/api/v1/project', checkUserApp, require('./api.v1/buildRouter'));
+    app.use('/api/v1/project', require('./api.v1/buildRouter'));
 
     app.get('/', (req, res) => {
         res.end('Welcome to android-app-configs')
