@@ -91,22 +91,20 @@ class BuilderQueue {
         return cb(null, {prev: this.queue.length});
     }
 
-    removeByBuildID(buildId) {
-        console.log('test', buildId, this.current);
-        if (this.current && this.current.buildId === buildId) {
+    removeByBuildID(appId) {
+        console.log('test', appId, this.current);
+        if (this.current && this.current.appId === appId) {
             this.current.canceled = true;
             return true;
         }
 
         for (let i = 0; i < this.queue.length; i++) {
-            if (this.queue[i].buildId === buildId) {
-                console.log('found');
+            if (this.queue[i].appId === appId) {
                 this.queue.splice(i, 1);
                 return true;
             }
         }
 
-        console.log('not found');
         return false;
     }
 }
