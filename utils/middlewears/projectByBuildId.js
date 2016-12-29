@@ -7,12 +7,13 @@ const UserApp = MongoConnection.model('UserApp');
 module.exports = (req, res, next) => {
     const emitter = new Emitter(req, res);
 
-    console.log(req.params.buildId);
     UserApp.findOne(
         {
             buildId: req.params.buildId
         },
         (err, project) => {
+            console.log('asd', project);
+            console.log('asd', err);
             if(err || !project) {
                 return emitter.sendError(new CustomErrors.InvalidBuildId());
             }
