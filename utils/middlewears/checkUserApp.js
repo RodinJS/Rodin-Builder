@@ -30,6 +30,7 @@ function cancel (req, res, next) {
             appId: project.appId
         },
         (err, userApp) => {
+            console.log('user app', userApp);
             if (err) {
                 return emitter.sendError(new CustomErrors.InvalidRequestData());
             }
