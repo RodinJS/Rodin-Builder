@@ -7,6 +7,7 @@ const UserApp = MongoConnection.model('UserApp');
 module.exports = (req, res, next) => {
     const emitter = new Emitter(req, res);
 
+    console.log(req.params.buildId);
     UserApp.findOne(
         {
             buildId: req.params.buildId
