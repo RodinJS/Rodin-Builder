@@ -4,15 +4,19 @@ const router = require('express').Router();
 router.get('/', (req, res) => {
     const emitter = new Emitter(req, res);
 
-    let buildStatus = req.project.built || false;
-    let error = req.project.error || {};
-
-    return emitter.sendData(
-        {
-            buildStatus: buildStatus,
-            error: error
-        }
-    );
+    if(req.project.built) {
+        return emitter.sendData(
+            {
+                buildStatus: true,
+            }
+        );
+    } else {
+        res.status(311).send(
+            {
+                error: req.project.error
+            }
+        )
+    }
 });
 
 module.exports = router;

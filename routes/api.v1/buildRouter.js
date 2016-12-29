@@ -76,21 +76,27 @@ const App = MongoConnection.model('App');
 router.post('/', checkUserApp.build, (req, res) => {
     const emitter = new Emitter(req, res);
 
-    const project = req.userApp.toObject();
-    project.responseURL = req.app.responseURL;
-    project.files = req.files;
-    project.buildId = UniqueID.v16();
+    req.userApp.buildId = UniqueID.v16();
 
-    builderQueue.requestBuild(project, (err, status) => {
+    req.userApp.save(err => {
         if (err) {
             return emitter.sendError(new CustomErrors.InvalidRequestData());
         }
 
-        return emitter.sendData({
-            buildId: project.buildId,
-            queueIndex: status.prev
-        });
-    })
+        let project = req.userApp.toObject();
+        project.responseURL = req.app.responseURL;
+        project.files = req.files;
+        builderQueue.requestBuild(project, (err, status) => {
+            if (err) {
+                return emitter.sendError(new CustomErrors.InvalidRequestData());
+            }
+
+            return emitter.sendData({
+                buildId: project.buildId,
+                queueIndex: status.prev
+            });
+        })
+    });
 });
 
 
@@ -141,7 +147,7 @@ router.post('/', checkUserApp.build, (req, res) => {
 router.delete('/', checkUserApp.cancel, (req, res) => {
     const emitter = new Emitter(req, res);
 
-    if(builderQueue.removeByBuildID(req.userApp.appId)) {
+    if (builderQueue.removeByBuildID(req.userApp.appId)) {
         return emitter.sendData('removed');
     }
 
