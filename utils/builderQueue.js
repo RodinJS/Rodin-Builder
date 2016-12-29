@@ -92,17 +92,20 @@ class BuilderQueue {
 
     removeByBuildID(buildId) {
         if (this.current && this.current.buildId === buildId) {
+            console.log('current');
             this.current.canceled = true;
             return true;
         }
 
         for (let i = 0; i < this.queue.length; i++) {
             if (this.queue[i].buildId === buildId) {
+                console.log('found');
                 this.queue.splice(i, 1);
                 return true;
             }
         }
 
+        console.log('not found');
         return false;
     }
 }
