@@ -17,7 +17,7 @@ const send = (app, cb) => {
             method: 'POST',
             preambleCRLF: true,
             postambleCRLF: true,
-            uri: `${configs.binSender[configs.envirement.mode].url}/${app.appId}/${configs.platform}`,
+            uri: `${configs.binSender[configs.envirement.mode()].url}/${app.appId}/${configs.platform}`,
             json: {
                 buildId: app.buildId,
                 built: app.built
