@@ -92,6 +92,7 @@ class BuilderQueue {
     }
 
     removeByBuildID(buildId) {
+        console.log(this.current);
         if (this.current && this.current.buildId === buildId) {
             this.current.canceled = true;
             return true;
