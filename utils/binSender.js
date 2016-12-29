@@ -10,14 +10,14 @@ const logger = new Logger(`${configs.platform}-${configs.envirement.mode()}.log`
 const MongoConnection = require('../mongoose/connection');
 const UserApp = MongoConnection.model('UserApp');
 
-console.log(configs.envirement);
+console.log(configs.envirement.mode());
 const send = (app, cb) => {
     request(
         {
             method: 'POST',
             preambleCRLF: true,
             postambleCRLF: true,
-            uri: `${configs.binSender[configs.envirement.mode()].url}/${app.appId}/${configs.platform}`,
+            uri: `${configs.binSender.url[configs.envirement.mode()]}/${app.appId}/${configs.platform}`,
             json: {
                 buildId: app.buildId,
                 built: app.built
