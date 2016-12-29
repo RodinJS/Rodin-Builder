@@ -30,6 +30,7 @@ class BuilderQueue {
 
     build(project) {
         this.busy = true;
+        this.current = project;
         console.log('build start');
 
         const builder = buildTools.createInstance(project);
@@ -69,6 +70,7 @@ class BuilderQueue {
                     },
                     err => {
                         console.log('built');
+                        delete this.current;
 
                         if (!this.isEmpty()) {
                             this.build(this.deQueue());
@@ -81,7 +83,6 @@ class BuilderQueue {
 
     requestBuild(project, cb) {
         if (this.isEmpty() && !this.busy) {
-            console.log(project);
             this.build(project);
         } else {
             this.queue.push(project);
@@ -91,14 +92,12 @@ class BuilderQueue {
     }
 
     removeByBuildID(buildId) {
-        console.log('current', this.current);
         if (this.current && this.current.buildId === buildId) {
             this.current.canceled = true;
             return true;
         }
 
         for (let i = 0; i < this.queue.length; i++) {
-            console.log(this.queue[i], this.current.buildId);
             if (this.queue[i].buildId === buildId) {
                 console.log('found');
                 this.queue.splice(i, 1);
