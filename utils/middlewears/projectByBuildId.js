@@ -12,8 +12,6 @@ module.exports = (req, res, next) => {
             buildId: req.params.buildId
         },
         (err, project) => {
-            console.log('asd', project);
-            console.log('asd', err);
             if(err || !project) {
                 return emitter.sendError(new CustomErrors.InvalidBuildId());
             }

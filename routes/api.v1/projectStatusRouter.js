@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
     let buildStatus = req.project.built || false;
     let error = req.project.error || {};
 
-    console.log(req.project);
+    console.log('logging project', req.project);
 
     return emitter.sendData(
         {
