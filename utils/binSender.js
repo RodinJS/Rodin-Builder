@@ -27,12 +27,11 @@ const send = (app, cb) => {
             }
         },
         (err, response, body) => {
-            if (err || response.statusCode !== 200) {
-                return cb(err);
+            if (!err && response.statusCode === 200) {
+                logger.info(`project with ${app.appId} sent`);
             }
 
             app.sent = true;
-            logger.info(`project with ${app.appId} sent`);
             return app.save(err => {
                 return cb();
             });
