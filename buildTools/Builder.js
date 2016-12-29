@@ -5,11 +5,11 @@ const iconProcess = require('./iconProcess');
 const configs = require('../config/config');
 
 class Builder {
-    constructor(project) {
+    constructor (project) {
         this.project = project;
     }
 
-    init(cb) {
+    init (cb) {
         console.log('this in init', this);
         const project = this.project;
         if (project.canceled)
@@ -39,7 +39,7 @@ class Builder {
         });
     };
 
-    copyTemplate(cb) {
+    copyTemplate (cb) {
         const project = this.project;
         if (project.canceled)
             return cb('cancelled');
@@ -54,27 +54,31 @@ class Builder {
         });
     };
 
-    clean(cb) {
+    clean (cb) {
         return cb();
     }
 
-    setupBuild(cb) {
+    setupBuild (cb) {
         return cb();
     }
 
-    setupProject(cb) {
+    setupProject (cb) {
         return cb();
     }
 
-    build(cb) {
+    build (cb) {
         return cb();
     }
 
-    rename(cb) {
+    rename (cb) {
+        const project = this.project;
+        if (project.canceled)
+            return cb('cancelled');
+
         const oldPath = this.project.binaryPath;
         const newPath = path.join(path.dirname(oldPath), this.project.appName + path.extname(oldPath));
         fs.rename(oldPath, newPath, err => {
-            if(err) {
+            if (err) {
                 return cb(err);
             }
 
@@ -83,7 +87,11 @@ class Builder {
         });
     }
 
-    iconProcess(cb) {
+    iconProcess (cb) {
+        const project = this.project;
+        if (project.canceled)
+            return cb('cancelled');
+
         return iconProcess(this.project)(cb);
     }
 }
