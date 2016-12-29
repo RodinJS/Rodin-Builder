@@ -1,3 +1,11 @@
+const minimist = require('minimist');
+
+let platform = "";
+const argv = minimist(process.argv.slice(2));
+console.log('argv', argv);
+global.env = argv['env'];
+
+const configs = require('./config/config');
 const express = require("express");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
@@ -6,11 +14,6 @@ const methodOverride = require('method-override');
 const morgan = require("morgan");
 const path = require("path");
 const async = require('async');
-const minimist = require('minimist');
-const configs = require('./config/config');
-
-let platform = "";
-const argv = minimist(process.argv.slice(2));
 
 switch (true) {
     case argv['ios']:

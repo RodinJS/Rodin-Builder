@@ -3,5 +3,5 @@
   "script"      : "app.js",
   "instances"   : "1",
   "exec_mode"   : "cluster",
-  "args"        : ["--oculus", "-p 10002"]
+  "args"        : ["--env dev", "--oculus", "-p 10002"]
 }
