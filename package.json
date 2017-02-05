@@ -16,7 +16,7 @@
     "method-override": "^2.3.7",
     "minimist": "^1.2.0",
     "mongoose": "^4.7.3",
-    "morgan": "^1.7.0",
+    "morgan": "^1.8.0",
     "multer": "^1.2.0",
     "node-cron": "^1.1.2",
     "opentok": "^2.5.0",
