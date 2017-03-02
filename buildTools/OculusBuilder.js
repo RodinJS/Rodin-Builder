@@ -13,26 +13,28 @@ class OculusBuilder extends Builder {
     }
 
     setupProject(cb) {
-        const project = this.project;
-        if (project.canceled)
-            return cb('cancelled');
+		const project = this.project;
+		if (project.canceled)
+			return cb('cancelled');
 
-        const jsonFilePath = path.join(project.projectPath, "RodinData", "config.json");
-        project.jsonFilePath = "RodinData/config.json";
-        let splitedUrl = project.url.split('/').filter(i => i !== '');
-        const content = JSON.stringify({
-            "appname": splitedUrl[splitedUrl.length - 1],
-            "username": splitedUrl[splitedUrl.length - 2]
-        });
+		const jsonFilePath = path.join(project.projectPath, "xul", "chrome", "content", "hello.xul");
+		project.jsonFilePath = "xul/chrome/content/hello.xul";
 
-        fs.writeFile(jsonFilePath, content, 'utf-8', (err) => {
-            if (err) {
-                return cb(new errors.FileWriteError(jsonFilePath, 'setupProject'));
-            }
+		fs.readFile("hello.xul", "utf-8", (err, content) => {
+			if (err) {
+				return cb(new errors.FileReadError(jsonFilePath, 'setupProject'));
+			}
+			content = content.replace("%appurl%", project.url);
+			console.log(content);
+			fs.writeFile(jsonFilePath, content, 'utf-8', (err) => {
+				if (err) {
+					return cb(new errors.FileWriteError(jsonFilePath, 'setupProject'));
+				}
 
-            console.log('Json change success');
-            return cb();
-        });
+				console.log('Xul change success');
+				return cb();
+			});
+		});
     }
 
     build(cb) {
