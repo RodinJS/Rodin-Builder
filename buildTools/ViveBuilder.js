@@ -25,7 +25,7 @@ class ViveBuilder extends Builder {
 				return cb(new errors.FileReadError(jsonFilePath, 'setupProject'));
 			}
             content = content.replace("%appurl%", project.url);
-
+            console.log(content);
 			fs.writeFile(jsonFilePath, content, 'utf-8', (err) => {
 				if (err) {
 					return cb(new errors.FileWriteError(jsonFilePath, 'setupProject'));
