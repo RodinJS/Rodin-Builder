@@ -17,21 +17,30 @@ class ViveBuilder extends Builder {
         if (project.canceled)
             return cb('cancelled');
 
-        const jsonFilePath = path.join(project.projectPath, "RodinData", "config.json");
-        project.jsonFilePath = "RodinData/config.json";
-        const content = JSON.stringify({
-            "appName": project.appName,
-            "appUrl": project.url
-        });
+        const jsonFilePath = path.join(project.projectPath, "xul", "chrome", "content", "hello.xul");
+        project.jsonFilePath = "xul/chrome/content/hello.xul";
 
-        fs.writeFile(jsonFilePath, content, 'utf-8', (err) => {
-            if (err) {
-                return cb(new errors.FileWriteError(jsonFilePath, 'setupProject'));
-            }
+        fs.readFile("hello.xul", "utf-8", (err, content) => {
+			if (err) {
+				return cb(new errors.FileReadError(jsonFilePath, 'setupProject'));
+			}
+            content = content.replace("%appurl%", project.url);
 
-            console.log('Json change success');
-            return cb();
+			fs.writeFile(jsonFilePath, content, 'utf-8', (err) => {
+				if (err) {
+					return cb(new errors.FileWriteError(jsonFilePath, 'setupProject'));
+				}
+
+				console.log('Xul change success');
+				return cb();
+			});
         });
+        //const content = JSON.stringify({
+        //    "appName": project.appName,
+        //    "appUrl": project.url
+        //});
+
+
     }
 
     build(cb) {
