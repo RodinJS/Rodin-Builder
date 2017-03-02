@@ -20,7 +20,7 @@ class OculusBuilder extends Builder {
 		const jsonFilePath = path.join(project.projectPath, "xul", "chrome", "content", "hello.xul");
 		project.jsonFilePath = "xul/chrome/content/hello.xul";
 
-		fs.readFile("hello.xul", "utf-8", (err, content) => {
+		fs.readFile(jsonFilePath, "utf-8", (err, content) => {
 			if (err) {
 				return cb(new errors.FileReadError(jsonFilePath, 'setupProject'));
 			}
