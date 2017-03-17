@@ -18,29 +18,39 @@ class ViveBuilder extends Builder {
             return cb('cancelled');
 
         const jsonFilePath = path.join(project.projectPath, "xul", "chrome", "content", "hello.xul");
-        project.jsonFilePath = "xul/chrome/content/hello.xul";
+        project.xulFilePath = "xul/chrome/content/hello.xul";
+        project.uxtFilePath = "RodinData/data.uxt";
+        project.exeFilePath = "RodinLauncherVive.exe";
 
-        fs.readFile("hello.xul", "utf-8", (err, content) => {
-			if (err) {
-				return cb(new errors.FileReadError(jsonFilePath, 'setupProject'));
-			}
+        fs.readFile(jsonFilePath, "utf-8", (err, content) => {
+            if (err) {
+                return cb(new errors.FileReadError(jsonFilePath, 'setupProject'));
+            }
             content = content.replace("%appurl%", project.url);
-            console.log(content);
-			fs.writeFile(jsonFilePath, content, 'utf-8', (err) => {
-				if (err) {
-					return cb(new errors.FileWriteError(jsonFilePath, 'setupProject'));
-				}
+            fs.writeFile(jsonFilePath, content, 'utf-8', (err) => {
+                if (err) {
+                    return cb(new errors.FileWriteError(jsonFilePath, 'setupProject'));
+                }
 
-				console.log('Xul change success');
-				return cb();
-			});
+                console.log('Xul change success');
+
+                const exeName = project.vive.store ? 'RodinLauncherVive_Store.exe':'RodinLauncherVive_Local.exe';
+
+                fs.rename(path.join(project.projectPath, exeName), path.join(project.projectPath, 'RodinLauncherVive.exe'), (err) => {
+                    if(err) {
+                        return cb(new errors.FileWriteError(jsonFilePath, 'RodinLauncherVive.exe'));
+                    }
+
+                    fs.writeFile(path.join(project.projectPath, project.uxtFilePath), project.vive.jsonData, 'ascii', (err) => {
+                        if(err) {
+                            return cb(new errors.FileWriteError(jsonFilePath, project.uxtFilePath));
+                        }
+
+                        return cb();
+                    });
+                });
+            });
         });
-        //const content = JSON.stringify({
-        //    "appName": project.appName,
-        //    "appUrl": project.url
-        //});
-
-
     }
 
     build(cb) {
@@ -48,7 +58,7 @@ class ViveBuilder extends Builder {
         if (project.canceled)
             return cb('cancelled');
 
-        child_process.exec(`zip -r Rodin.zip ${project.jsonFilePath}`, {cwd: project.projectPath}, (err, stdout, stderr) => {
+        child_process.exec(`zip -r Rodin.zip ${project.xulFilePath} ${project.uxtFilePath} ${project.exeFilePath}`, {cwd: project.projectPath}, (err, stdout, stderr) => {
             if (err || stdout.match(new RegExp('error'))) {
                 project.built = 'failed';
                 console.log(`build status: ${project.built}`);

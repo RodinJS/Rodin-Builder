@@ -30,7 +30,6 @@ function cancel (req, res, next) {
             appId: project.appId
         },
         (err, userApp) => {
-            console.log('user app', userApp);
             if (err) {
                 return emitter.sendError(new CustomErrors.InvalidRequestData());
             }
@@ -43,18 +42,17 @@ function cancel (req, res, next) {
 
 function build(req, res, next) {
     const emitter = new Emitter(req, res);
-    console.log('mtav');
 
     if (!req.body.project) {
         return emitter.sendError(new CustomErrors.InvalidRequestData());
     }
 
     const project = JSON.parse(req.body.project);
+    // const project = req.body.project;
 
     if (!project.appId || !project.userId) {
         return emitter.sendError(new CustomErrors.InvalidRequestData());
     }
-
     UserApp.findOne(
         {
             userId: project.userId,
@@ -74,7 +72,6 @@ function build(req, res, next) {
 
             userApp.save((err, userApp) => {
                 if (err) {
-                    console.log(err);
                     return emitter.sendError(new CustomErrors.InvalidRequestData());
                 }
 

@@ -18,7 +18,7 @@ class OculusBuilder extends Builder {
 			return cb('cancelled');
 
 		const jsonFilePath = path.join(project.projectPath, "xul", "chrome", "content", "hello.xul");
-		project.jsonFilePath = "xul/chrome/content/hello.xul";
+		project.xulFilePath = "xul/chrome/content/hello.xul";
 
 		fs.readFile(jsonFilePath, "utf-8", (err, content) => {
 			if (err) {
@@ -42,7 +42,7 @@ class OculusBuilder extends Builder {
         if (project.canceled)
             return cb('cancelled');
 
-        child_process.exec(`zip -r Rodin.zip ${project.jsonFilePath}`, {cwd: project.projectPath}, (err, stdout, stderr) => {
+        child_process.exec(`zip -r Rodin.zip ${project.xulFilePath}`, {cwd: project.projectPath}, (err, stdout, stderr) => {
             if (err || stdout.match(new RegExp('error'))) {
                 project.built = 'failed';
                 console.log(`build status: ${project.built}`);

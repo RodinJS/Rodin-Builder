@@ -63,7 +63,7 @@ module.exports = app => {
 
     app.use('/', requestLogger);
     app.use('/api/v1/bin/:downloadUrl', projectByDownloadUrl, require('./api.v1/binRouter'));
-    app.use('/api', checkAppSecret);
+    // app.use('/api', checkAppSecret);
     app.use('/api/v1/app', require('./api.v1/appRouter'));
     app.use('/api/v1/status/:buildId', projectByBuildId, require('./api.v1/projectStatusRouter'));
     app.use('/api/v1/project/:buildId', projectByBuildId, require('./api.v1/projectRouter'));

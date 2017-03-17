@@ -74,7 +74,7 @@ async.parallel(
         }
 
         require("./routes/setupRoutes")(app);
-        require("./utils/binSender").run();
+        // require("./utils/binSender").run();
         const port = argv['p'] || configs.server.port;
         app.listen(port, '0.0.0.0', () => {
             console.log(`Server running on port ${port}`);

@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const configs = require('../../config/config');
 const UniqueID = require('../../utils/UniqueID');
+const crypt = require('../../utils/crypt');
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema(
+const userAppSchema = new Schema(
     {
         userId: {
             type: String,
@@ -88,7 +89,14 @@ const userSchema = new Schema(
         vive: {
             package: String,
             iconPath: String,
-            keyStore: {}
+            keyStore: {},
+            viveportId: String,
+            viveportKey: String,
+            store: {
+                type: Boolean,
+                default: false
+            },
+            jsonData: String
         },
 
         oculus: {
@@ -99,9 +107,20 @@ const userSchema = new Schema(
     }
 );
 
-userSchema.index({userId: 1});
-userSchema.index({userId: 1, appId: 1});
-userSchema.set("autoIndex", configs.db.autoIndex);
-userSchema.plugin(require('../plugins/pagedFind'));
+userAppSchema.pre('save', function (next) {
+    if(this.vive && this.vive.viveportId) {
+        this.vive.store = true;
+        this.vive.jsonData = crypt(JSON.stringify({id: this.vive.viveportId, key: this.vive.viveportKey}), configs.rodin_key);
+        this.vive.viveportId = undefined;
+        this.vive.viveportKey = undefined;
+    }
 
-module.exports = userSchema;
+    next();
+});
+
+userAppSchema.index({userId: 1});
+userAppSchema.index({userId: 1, appId: 1});
+userAppSchema.set("autoIndex", configs.db.autoIndex);
+userAppSchema.plugin(require('../plugins/pagedFind'));
+
+module.exports = userAppSchema;
