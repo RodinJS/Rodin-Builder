@@ -53,31 +53,42 @@ function build(req, res, next) {
     if (!project.appId || !project.userId) {
         return emitter.sendError(new CustomErrors.InvalidRequestData());
     }
-    UserApp.findOne(
-        {
-            userId: project.userId,
-            appId: project.appId
-        },
-        (err, userApp) => {
-            if (err) {
-                return emitter.sendError(new CustomErrors.InvalidRequestData());
-            }
 
-            if (!userApp)
-                userApp = new UserApp(project);
-            else
-                for (let i in project)
-                    if (project.hasOwnProperty(i))
-                        userApp[i] = project[i];
-
-            userApp.save((err, userApp) => {
-                if (err) {
-                    return emitter.sendError(new CustomErrors.InvalidRequestData());
-                }
-
-                req.userApp = userApp;
-                return next();
-            })
+    const userApp = new UserApp(project);
+    userApp.save((err, userApp) => {
+        if (err) {
+            return emitter.sendError(new CustomErrors.InvalidRequestData());
         }
-    )
+
+        req.userApp = userApp;
+        return next();
+    });
+
+    // UserApp.findOne(
+    //     {
+    //         userId: project.userId,
+    //         appId: project.appId
+    //     },
+    //     (err, userApp) => {
+    //         if (err) {
+    //             return emitter.sendError(new CustomErrors.InvalidRequestData());
+    //         }
+    //
+    //         if (!userApp)
+    //             userApp = new UserApp(project);
+    //         else
+    //             for (let i in project)
+    //                 if (project.hasOwnProperty(i))
+    //                     userApp[i] = project[i];
+    //
+    //         userApp.save((err, userApp) => {
+    //             if (err) {
+    //                 return emitter.sendError(new CustomErrors.InvalidRequestData());
+    //             }
+    //
+    //             req.userApp = userApp;
+    //             return next();
+    //         })
+    //     }
+    // )
 }
