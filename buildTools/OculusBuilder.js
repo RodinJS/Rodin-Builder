@@ -22,16 +22,20 @@ class OculusBuilder extends Builder {
 
 		fs.readFile(jsonFilePath, "utf-8", (err, content) => {
 			if (err) {
+			    this.logger.info('File Read error');
+			    this.logger.info(err);
 				return cb(new errors.FileReadError(jsonFilePath, 'setupProject'));
 			}
+
 			content = content.replace("%appurl%", project.url);
-			console.log(content);
 			fs.writeFile(jsonFilePath, content, 'utf-8', (err) => {
 				if (err) {
+				    this.logger.info("File Write error");
+				    this.logger.info(err);
 					return cb(new errors.FileWriteError(jsonFilePath, 'setupProject'));
 				}
 
-				console.log('Xul change success');
+				this.logger.info('Xul change success');
 				return cb();
 			});
 		});
@@ -42,14 +46,17 @@ class OculusBuilder extends Builder {
         if (project.canceled)
             return cb('cancelled');
 
-        child_process.exec(`zip -r Rodin.zip ${project.xulFilePath}`, {cwd: project.projectPath}, (err, stdout, stderr) => {
+        const cmd = `zip -r Rodin.zip ${project.xulFilePath}`;
+        this.logger.info(`Executing command ${cmd}`);
+        child_process.exec(cmd, {cwd: project.projectPath}, (err, stdout, stderr) => {
             if (err || stdout.match(new RegExp('error'))) {
+                this.logger.info("Build failed");
+                this.logger.info({err, stdout, stderr});
                 project.built = 'failed';
-                console.log(`build status: ${project.built}`);
                 return cb(new errors.BuildError(stdout, stderr));
             }
 
-            console.log(`build status: ${project.built}`);
+            this.logger.info("Build success");
             project.built = 'success';
             project.binaryPath = path.join(project.projectPath, configs.builder.buildDir, 'Rodin.zip');
             return cb();

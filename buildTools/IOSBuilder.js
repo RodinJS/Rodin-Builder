@@ -29,18 +29,25 @@ class IOSBuilder extends Builder {
                     const cert = project.files.cert[0];
                     fs.copy(cert.path, newPath, err => {
                         if (err) {
-                            return done(err);
+                            this.logger.info("Cert Copy error");
+                            this.logger.info(err);
+                            return done(new errors.CopyError(cert.path, newPath, 'setupbuild'));
                         }
 
-                        child_process.exec(`security import ${newPath} -k ~/Library/Keychains/login.keychain -P ${project.ios.certPassword} -T /usr/bin/codesign`, (err, stdout, etderr) => {
+                        const cmd = `security import ${newPath} -k ~/Library/Keychains/login.keychain -P ${project.ios.certPassword} -T /usr/bin/codesign`;
+                        this.logger.info(`Executing command "${cmd}"`);
+                        child_process.exec(cmd, (err, stdout, etderr) => {
                             if (err) {
-                                return done(err);
+                                this.logger.info("Cert inport error");
+                                this.logger.info(err);
+                                return done(new errors.CertImportError());
                             }
 
                             return done();
                         });
                     });
                 },
+
                 done => {
                     if (!project.files.profile || project.files.profile.length !== 1) {
                         return done(new Error('profile does not provided'));
@@ -49,7 +56,9 @@ class IOSBuilder extends Builder {
                     const profile = project.files.profile[0];
                     fs.readFile(profile.path, 'utf-8', (err, content) => {
                         if (err) {
-                            return done(err);
+                            this.logger.info("File Read error");
+                            this.logger.info(err);
+                            return done(new errors.FileReadError(profile.path, 'setupbuild'));
                         }
 
                         let uuidRegExp = new RegExp(configs.builder.uuidRegExp);
@@ -59,9 +68,12 @@ class IOSBuilder extends Builder {
                         project.ios.uuName = uuNameRegExp.exec(content)[1];
                         project.ios.uuDevelopmentTeam = uuDevelopmentTeamRegExp.exec(content)[1];
 
-                        fs.copy(profile.path, path.join(path.join(configs.builder.userDir, configs.builder.libDir), project.ios.uuid + '.mobileprovision'), err => {
+                        const newPath = path.join(path.join(configs.builder.userDir, configs.builder.libDir), project.ios.uuid + '.mobileprovision');
+                        fs.copy(profile.path, newPath, err => {
                             if (err) {
-                                return done(err);
+                                this.logger.info("Profile Copy error");
+                                this.logger.info(err);
+                                return done(new errors.CopyError(profile.path, newPath, 'setupbuild'));
                             }
 
                             return done();
@@ -69,13 +81,7 @@ class IOSBuilder extends Builder {
                     });
                 }
             ],
-            err => {
-                if (err) {
-                    return cb(err);
-                }
-
-                return cb();
-            }
+            cb
         );
     }
 
@@ -90,7 +96,9 @@ class IOSBuilder extends Builder {
 
         fs.readFile(plistFilePath, 'utf-8', (err, content) => {
             if (err) {
-                return cb(err);
+                this.logger.info("Plist Read error");
+                this.logger.info(err);
+                return cb(new errors.FileReadError(plistFilePath, 'setupproject'));
             }
 
             content = content.replace('REPLACE_URL', project.url);
@@ -99,13 +107,17 @@ class IOSBuilder extends Builder {
 
             fs.writeFile(plistFilePath, content, 'utf-8', (err) => {
                 if (err) {
-                    return cb(err);
+                    this.logger.info("Plist Write error");
+                    this.logger.info(err);
+                    return cb(new errors.FileWriteError(plistFilePath, 'setupproject'));
                 }
 
-                console.log('plist change success');
+                this.logger.info("Plist change success");
                 fs.readFile(xbprojPath, 'utf-8', (err, xbproj) => {
                     if (err) {
-                        return cb(err);
+                        this.logger.info("xbproj Read error");
+                        this.logger.info(err);
+                        return cb(new errors.FileReadError(xbprojPath, 'setupproject'));
                     }
 
                     xbproj = xbproj.replace('REPLACE_DEVELOPMENT_TEAM', project.ios.uuDevelopmentTeam);
@@ -115,14 +127,18 @@ class IOSBuilder extends Builder {
 
                     fs.writeFile(xbprojPath, xbproj, 'utf-8', (err) => {
                         if (err) {
-                            return cb(err);
+                            this.logger.info("xbproj Write error");
+                            this.logger.info(err);
+                            return cb(new errors.FileWriteError(xbprojPath, err));
                         }
 
-                        console.log('xbproj change success');
+                        this.logger.info('xbproj change success');
 
                         fs.readFile(exportOptionsPath, 'utf-8', (err, exportOptions) => {
                             if (err) {
-                                return cb(err);
+                                this.logger.info("exprtOptions Read error");
+                                this.logger.info(err);
+                                return cb(new errors.FileReadError(exportOptionsPath, 'setupproject'));
                             }
 
                             exportOptions = exportOptions.replace('REPLACE_METHOD', project.ios.exportMethod);
@@ -130,10 +146,12 @@ class IOSBuilder extends Builder {
 
                             fs.writeFile(exportOptionsPath, exportOptions, 'utf-8', (err) => {
                                 if (err) {
-                                    return cb(err);
+                                    this.logger.info("exportOptions Write error");
+                                    this.logger.info(err);
+                                    return cb(new errors.FileWriteError(exportOptionsPath, 'setupproject'));
                                 }
 
-                                console.log('exportOptions change success');
+                                this.logger.info('exportOptions change success');
                                 return cb();
                             });
                         });
@@ -149,16 +167,19 @@ class IOSBuilder extends Builder {
             return cb('cancelled');
 
         const ipaName = `app-rodin-release-${Date.now()}`;
-        child_process.exec(`sh build.sh ${ipaName} ${project.projectPath}`, {cwd: path.join(configs.builder.userDir, configs.builder.projectsDir)}, (err, stdout, stderr) => {
+        const cmd = `sh build.sh ${ipaName} ${project.projectPath}`;
+        this.logger.info(`Executing command "${cmd}"`)
+        child_process.exec(cmd, {cwd: path.join(configs.builder.userDir, configs.builder.projectsDir)}, (err, stdout, stderr) => {
             if (stdout.match(new RegExp('EXPORT SUCCEEDED'))) {
+                this.logger.info("Build success");
                 project.built = 'success';
                 project.binaryPath = path.join(project.projectPath, configs.builder.buildDir, 'Rodin.ipa');
-                console.log(`build status: ${project.built}`);
                 return cb();
             }
 
+            this.logger.info("Build error");
+            this.logger.info({err, stdout, stderr});
             project.built = 'failed';
-            console.log(`build status: ${project.built}`);
             return cb(new errors.BuildError(stdout, stderr));
         });
     }

@@ -20,7 +20,8 @@ const send = (app, cb) => {
             uri: `${configs.binSender.url[configs.envirement.mode()]}/${app.appId}/${configs.platform}`,
             json: {
                 buildId: app.buildId,
-                built: app.built
+                buildStatus: app.built,
+                error: app.errors
             },
             headers: {
                 'x-access-token': configs.binSender.token
@@ -42,8 +43,17 @@ const send = (app, cb) => {
 const sendResponse = () => {
     UserApp.find(
         {
-            built: true,
-            sent: false
+            $or: [
+                {
+                    built: true,
+                    sent: false
+                },
+                {
+                    built: false,
+                    error: { $exists: true },
+                    sent: false
+                }
+            ]
         },
         (err, apps) => {
             if (err) {

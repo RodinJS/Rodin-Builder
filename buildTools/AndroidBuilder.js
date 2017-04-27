@@ -17,15 +17,16 @@ class AndroidBuilder extends Builder {
         if (project.canceled)
             return cb('cancelled');
 
-        child_process.exec('./gradlew clean', {cwd: project.projectPath}, (err, stdout, stderr) => {
+        const cmd = './gradlew clean';
+        this.logger.info(`Executing command "${cmd}"`);
+        child_process.exec(cmd, {cwd: project.projectPath}, (err, stdout, stderr) => {
             if (stdout.match(new RegExp('BUILD SUCCESSFUL'))) {
-                project.built = 'success';
-                console.log(`build status: ${project.built}`);
+                this.logger.info("Clean Success");
                 return cb();
             }
 
-            project.built = 'failed';
-            console.log(`build status: ${project.built}`);
+            this.logger.info("Clean Failed");
+            this.logger.info({err, stdout, stderr});
             return cb(new errors.CleanError(stdout, stderr));
         });
     }
@@ -48,52 +49,27 @@ class AndroidBuilder extends Builder {
         ];
         const cmd = `keytool ${cmdParams.join(" ")}`;
 
+        this.logger.info(`Executing command "${cmd}"`);
         child_process.exec(cmd, {cwd: project.projectPath}, (err, stdout, stderr) => {
-            console.log('stdout', stdout);
-            console.log('stderr', stderr);
-            console.log('keyStore generate success');
+            if(err) {
+                this.logger.info({err, stdout, stderr});
+                this.logger.info({stdout, stderr});
+
+                // todo: fix this;
+                return cb(new Error());
+            }
+
+            this.logger.info("keyStore Success");
             project.keyStorePath = path.join(project.projectPath, `${keyStore.name}.keystore`);
             return cb();
         });
     }
-
-    // setupProject(cb) {
-    //     const project = this.project;
-    //     if (project.canceled)
-    //         return cb('cancelled');
-    //
-    //     const gradleFilePath = path.join(project.projectPath, 'app', 'build.gradle');
-    //     fs.readFile(gradleFilePath, 'utf-8', (err, content) => {
-    //         if (err) {
-    //             return cb(err);
-    //         }
-    //
-    //         content = content.replace('RELEASE_STORE_FILE', project.keyStorePath);
-    //         content = content.replace('RELEASE_STORE_PASSWORD', project.android.keyStore.password);
-    //         content = content.replace('RELEASE_KEY_ALIAS', project.android.keyStore.alias);
-    //         content = content.replace('RELEASE_KEY_PASSWORD', project.android.keyStore.aliasPassword);
-    //         content = content.replace('REPLACE_PACKAGE', project.android.package);
-    //         content = content.replace('REPLACE_VERSION', project.version);
-    //         content = content.replace('REPLACE_URL', project.url);
-    //         content = content.replace('REPLACE_NAME', project.appName);
-    //
-    //         fs.writeFile(gradleFilePath, content, 'utf-8', (err) => {
-    //             if (err) {
-    //                 return cb(err);
-    //             }
-    //
-    //             console.log('gradle change success');
-    //             return cb();
-    //         })
-    //     });
-    // }
 
     build(cb) {
         const project = this.project;
         if (project.canceled)
             return cb('cancelled');
 
-        console.log('keysotrepath', project.keyStorePath);
         const cmdParams = [
             `-PRReleaseStoreFile="${project.keyStorePath}"`,
             `-PRReleaseStorePassword="${project.android.keyStore.password}"`,
@@ -108,16 +84,18 @@ class AndroidBuilder extends Builder {
 
         const cmd = `./gradlew assembleRodinRelease ${cmdParams.join(" ")}`;
 
+        this.logger.info(`Executing command "${cmd}"`);
         child_process.exec(cmd, {cwd: project.projectPath}, (err, stdout, stderr) => {
             if (stdout.match(new RegExp('BUILD SUCCESSFUL'))) {
                 project.built = 'success';
                 project.binaryPath = path.join(project.projectPath, configs.builder.buildDir, 'app-rodin-release.apk');
-                console.log(`build status: ${project.built}`);
+                this.logger.info("Build Success");
                 return cb();
             }
 
             project.built = 'failed';
-            console.log(`build status: ${project.built}`);
+            this.logger.info("Build Failed");
+            this.logger.info({err, stdout, stderr});
             return cb(new errors.BuildError(stdout, stderr));
         });
     }

@@ -47,8 +47,8 @@ function build(req, res, next) {
         return emitter.sendError(new CustomErrors.InvalidRequestData());
     }
 
-    const project = JSON.parse(req.body.project);
-    // const project = req.body.project;
+    // const project = JSON.parse(req.body.project);
+    const project = req.body.project;
 
     if (!project.appId || !project.userId) {
         return emitter.sendError(new CustomErrors.InvalidRequestData());
@@ -63,32 +63,4 @@ function build(req, res, next) {
         req.userApp = userApp;
         return next();
     });
-
-    // UserApp.findOne(
-    //     {
-    //         userId: project.userId,
-    //         appId: project.appId
-    //     },
-    //     (err, userApp) => {
-    //         if (err) {
-    //             return emitter.sendError(new CustomErrors.InvalidRequestData());
-    //         }
-    //
-    //         if (!userApp)
-    //             userApp = new UserApp(project);
-    //         else
-    //             for (let i in project)
-    //                 if (project.hasOwnProperty(i))
-    //                     userApp[i] = project[i];
-    //
-    //         userApp.save((err, userApp) => {
-    //             if (err) {
-    //                 return emitter.sendError(new CustomErrors.InvalidRequestData());
-    //             }
-    //
-    //             req.userApp = userApp;
-    //             return next();
-    //         })
-    //     }
-    // )
 }

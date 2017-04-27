@@ -70,6 +70,6 @@ module.exports = app => {
     app.use('/api/v1/project', require('./api.v1/buildRouter'));
 
     app.get('/', (req, res) => {
-        res.end('Welcome to android-app-configs')
+        res.end('Welcome to app-configs')
     })
 };

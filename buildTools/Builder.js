@@ -3,15 +3,18 @@ const path = require('path');
 const fs = require('fs-extra');
 const iconProcess = require('./iconProcess');
 const configs = require('../config/config');
+const Logger = require("../logger/Logger");
 
 class Builder {
     constructor (project) {
         this.project = project;
+        this.logger = new Logger(`builds/${configs.platform}/${this.project.buildId}.log`, false);
     }
 
     init (cb) {
-        console.log('this in init', this);
         const project = this.project;
+        this.logger.info('Build start');
+        this.logger.info(project);
         if (project.canceled)
             return cb('cancelled');
 
@@ -23,17 +26,22 @@ class Builder {
 
         fs.stat(projectPath, (err, status) => {
             if (status) {
-                console.log(`removing folder: ${projectPath}`);
-                fs.removeSync(projectPath);
-                console.log(`folder removed: ${projectPath}`);
+                try {
+                    fs.removeSync(projectPath);
+                    this.logger.info(`folder removed: ${projectPath}`);
+                } catch (err) {
+                    this.logger.info(err);
+                    return cb(new errors.RMDIRError(projectPath, 'init'));
+                }
             }
 
             fs.mkdirp(projectPath, err => {
-                console.log(`folder created: ${projectPath}`);
                 if (err) {
+                    this.logger.info(err);
                     return cb(new errors.MKDIRError(projectPath, 'init'));
                 }
 
+                this.logger.info(`folder created: ${projectPath}`);
                 return cb();
             });
         });
@@ -46,10 +54,11 @@ class Builder {
 
         fs.copy(project.tempProjectPath, project.projectPath, (err) => {
             if (err) {
+                this.logger.info(err);
                 return cb(new errors.CopyError(project.tempProjectPath, project.projectPath, 'copy'));
             }
 
-            console.log(`copy to folder: ${project.projectPath}`);
+            this.logger.info(`copy to folder: ${project.projectPath}`);
             return cb();
         });
     };

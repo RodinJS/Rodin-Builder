@@ -1,14 +1,10 @@
 const async = require('async');
-const fs = require('fs-extra');
-const configs = require('../config/config');
 const path = require('path');
-const request = require('request');
-const child_process = require('child_process');
+const buildTools = require(`../buildTools`);
 
 const MongoConnection = require('../mongoose/connection');
 const UserApp = MongoConnection.model('UserApp');
 
-const buildTools = require(`../buildTools`);
 
 class BuilderQueue {
     constructor() {
@@ -31,7 +27,6 @@ class BuilderQueue {
     build(project) {
         this.busy = true;
         this.current = project;
-        console.log('build start');
 
         const builder = buildTools.createInstance(this.current);
 
@@ -49,28 +44,36 @@ class BuilderQueue {
             err => {
                 this.busy = false;
 
+                const updateQuery = {
+                    $set: {}
+                };
+
                 if (err) {
-                    if (!this.isEmpty()) {
-                        this.build(this.deQueue());
+                    builder.logger.info('Build failed');
+                    updateQuery.$set = {
+                        built: false,
+                        sent: false,
+                        buildId: project.buildId,
+                        error: err
                     }
-                    console.log(err);
-                    return;
+                } else {
+                    builder.logger.info('Build success');
+                    updateQuery.$set = {
+                        built: true,
+                        sent: false,
+                        buildId: project.buildId,
+                        bin: {
+                            path: path.join(project.binaryPath)
+                        }
+                    }
                 }
 
                 UserApp.findByIdAndUpdate(project._id,
-                    {
-                        $set: {
-                            built: true,
-                            sent: false,
-                            buildId: project.buildId,
-                            bin: {
-                                path: path.join(project.binaryPath)
-                            }
-                        }
-                    },
+                    updateQuery,
                     err => {
-                        console.log('built');
-                        delete this.current;
+                        if(!err) {
+                            delete this.current;
+                        }
 
                         if (!this.isEmpty()) {
                             this.build(this.deQueue());
@@ -92,7 +95,6 @@ class BuilderQueue {
     }
 
     removeByBuildID(appId) {
-        console.log('test', appId, this.current);
         if (this.current && this.current.appId === appId) {
             this.current.canceled = true;
             return true;

@@ -47,11 +47,6 @@ const userAppSchema = new Schema(
 
         buildId: String,
 
-        buildStatus: {
-            type: Boolean,
-            default: false
-        },
-
         downloadUrl: String,
 
         ios: {
@@ -103,6 +98,13 @@ const userAppSchema = new Schema(
             package: String,
             iconPath: String,
             keyStore: {}
+        },
+
+        error: {
+            message: String,
+            details: String,
+            timestamp: Number,
+            phase: String
         }
     }
 );
