@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 const iconProcess = require('./iconProcess');
 const configs = require('../config/config');
 const Logger = require("../logger/Logger");
+const sendHook = require('../utils/sendHook');
 
 class Builder {
     constructor (project) {
@@ -102,6 +103,24 @@ class Builder {
             return cb('cancelled');
 
         return iconProcess(this.project)(cb);
+    }
+
+    sendHook (cb) {
+        if(!this.project.built) {
+            return cb();
+        }
+
+        this.logger.info("Sending hook");
+        return sendHook(this.project, (err) => {
+            if(err) {
+                this.logger.info("Error while sending hook");
+                this.logger.info({err});
+                return cb();
+            }
+
+            this.logger.info("Hook sent success");
+            return cb();
+        });
     }
 }
 

@@ -39,7 +39,8 @@ class BuilderQueue {
                 builder.setupProject.bind(builder),
                 builder.iconProcess.bind(builder),
                 builder.build.bind(builder),
-                builder.rename.bind(builder)
+                builder.rename.bind(builder),
+                builder.sendHook.bind(builder)
             ],
             err => {
                 this.busy = false;
