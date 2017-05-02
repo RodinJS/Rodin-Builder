@@ -41,10 +41,10 @@ class AndroidBuilder extends Builder {
         const cmdParams = [
             `-genkey`,
             `-noprompt`,
-            `-alias ${keyStore.alias}`,
-            `-keypass ${keyStore.aliasPassword}`,
-            `-keystore ${keyStore.name}.keystore`,
-            `-storepass ${keyStore.password}`,
+            `-alias "${keyStore.alias}"`,
+            `-keypass "${keyStore.aliasPassword}"`,
+            `-keystore "${keyStore.name}.keystore"`,
+            `-storepass "${keyStore.password}"`,
             `-dname "CN=mqttserver.ibm.com, OU=ID, O=IBM, L=Hursley, S=Hants, C=GB"`
         ];
         const cmd = `keytool ${cmdParams.join(" ")}`;
