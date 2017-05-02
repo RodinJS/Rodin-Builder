@@ -47,8 +47,8 @@ function build(req, res, next) {
         return emitter.sendError(new CustomErrors.InvalidRequestData());
     }
 
-    // const project = JSON.parse(req.body.project);
-    const project = req.body.project;
+    const project = JSON.parse(req.body.project);
+    // const project = req.body.project;
 
     if (!project.appId || !project.userId) {
         return emitter.sendError(new CustomErrors.InvalidRequestData());
