@@ -49,7 +49,7 @@ class BuilderQueue {
                 };
 
                 if (err) {
-                    builder.logger.info('Build failed');
+                    builder.logger.info(`Saving project with error ${project.buildId}`);
                     updateQuery.$set = {
                         built: false,
                         sent: false,
@@ -57,7 +57,7 @@ class BuilderQueue {
                         error: err
                     }
                 } else {
-                    builder.logger.info('Build success');
+                    builder.logger.info(`Saving built project ${project.buildId}`);
                     updateQuery.$set = {
                         built: true,
                         sent: false,
