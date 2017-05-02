@@ -4,7 +4,7 @@ const router = require('express').Router();
 router.get('/', (req, res) => {
     const emitter = new Emitter(req, res);
 
-    if(req.project.error) {
+    if(req.project.error && req.project.error.message) {
         return emitter.sendData(
             {
                 buildStatus: false,
