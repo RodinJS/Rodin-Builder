@@ -128,6 +128,7 @@ class Builder {
                 }
             },
             (err, response, body) => {
+                console.log('xuy', err);
                 if (!err && response.statusCode === 200) {
                     return cb();
                 }
