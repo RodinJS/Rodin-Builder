@@ -21,7 +21,7 @@ class Builder {
             return cb('cancelled');
 
         const tempProjectPath = path.join(configs.builder.userDir, configs.builder.projectsDir, configs.builder.tempProjectName);
-        const projectPath = path.join(configs.builder.userDir, configs.builder.projectsDir, project.userId, project.appId);
+        const projectPath = path.join(configs.builder.userDir, configs.builder.projectsDir, 'projects', project.userId, project.appId);
 
         project.tempProjectPath = tempProjectPath;
         project.projectPath = projectPath;
@@ -112,18 +112,6 @@ class Builder {
         }
 
         this.logger.info("Sending hook");
-        // sendHook(this.project, (err) => {
-        //     if(err) {
-        //         this.logger.info("Error while sending hook");
-        //         this.logger.info({err});
-        //         return cb();
-        //     }
-        //
-        //     this.logger.info("Hook sent success");
-        //     return cb();
-        // });
-
-        console.log('asdasdasdasdasdasdasdas');
         request(
             {
                 method: 'POST',

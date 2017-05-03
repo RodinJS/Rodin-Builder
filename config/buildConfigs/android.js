@@ -1,5 +1,5 @@
 module.exports.userDir = '/root';
-module.exports.projectsDir = 'projects';
+module.exports.projectsDir = 'androidProjects';
 module.exports.buildDir = 'app/build/outputs/apk';
 module.exports.tempProjectName = 'Rodin';
 
