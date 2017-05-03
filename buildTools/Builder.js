@@ -109,6 +109,7 @@ class Builder {
     sendHook (cb) {
         cb();
 
+        this.logger.info(configs.envirement.mode());
         const uri = `${configs.binSender.url[configs.envirement.mode()]}/${this.project.appId}/${configs.platform}`
         this.logger.info(`Sending hook to ${uri}`);
         request(
