@@ -129,7 +129,7 @@ class Builder {
             },
             (err, response, body) => {
                 if (!err && response.statusCode === 200) {
-                    this.logger.info('Hook sent')
+                    return this.logger.info('Hook sent');
                 }
 
                 this.logger.info('Error while sending hook');
