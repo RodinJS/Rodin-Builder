@@ -107,9 +107,7 @@ class Builder {
     }
 
     sendHook (cb) {
-        if(!this.project.built) {
-            return cb();
-        }
+        cb();
 
         this.logger.info("Sending hook");
         request(
@@ -117,23 +115,23 @@ class Builder {
                 method: 'POST',
                 preambleCRLF: true,
                 postambleCRLF: true,
-                uri: `${configs.binSender.url[configs.envirement.mode()]}/${app.appId}/${configs.platform}`,
+                uri: `${configs.binSender.url[configs.envirement.mode()]}/${this.project.appId}/${configs.platform}`,
                 json: {
-                    buildId: app.buildId,
-                    buildStatus: app.built,
-                    error: app.errors
+                    buildId: this.project.buildId,
+                    buildStatus: this.project.built,
+                    error: this.project.errors
                 },
                 headers: {
                     'x-access-token': configs.binSender.token
                 }
             },
             (err, response, body) => {
-                console.log('xuy', err);
                 if (!err && response.statusCode === 200) {
-                    return cb();
+                    this.logger.info('Hook sent')
                 }
 
-                return cb({err, statusCode: response.statusCode, body})
+                this.logger.info('Error while sending hook');
+                this.logger.info({err, statusCode: response.statusCode, body})
             }
         );
     }
