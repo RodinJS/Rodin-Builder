@@ -1,6 +1,7 @@
 const errors = require('./buildErrors');
 const path = require('path');
 const fs = require('fs-extra');
+const request = require('request');
 const iconProcess = require('./iconProcess');
 const configs = require('../config/config');
 const Logger = require("../logger/Logger");
@@ -111,16 +112,40 @@ class Builder {
         }
 
         this.logger.info("Sending hook");
-        sendHook(this.project, (err) => {
-            if(err) {
-                this.logger.info("Error while sending hook");
-                this.logger.info({err});
-                return cb();
-            }
+        // sendHook(this.project, (err) => {
+        //     if(err) {
+        //         this.logger.info("Error while sending hook");
+        //         this.logger.info({err});
+        //         return cb();
+        //     }
+        //
+        //     this.logger.info("Hook sent success");
+        //     return cb();
+        // });
 
-            this.logger.info("Hook sent success");
-            return cb();
-        });
+        request(
+            {
+                method: 'POST',
+                preambleCRLF: true,
+                postambleCRLF: true,
+                uri: `${configs.binSender.url[configs.envirement.mode()]}/${app.appId}/${configs.platform}`,
+                json: {
+                    buildId: app.buildId,
+                    buildStatus: app.built,
+                    error: app.errors
+                },
+                headers: {
+                    'x-access-token': configs.binSender.token
+                }
+            },
+            (err, response, body) => {
+                if (!err && response.statusCode === 200) {
+                    return cb();
+                }
+
+                return cb({err, statusCode: response.statusCode, body})
+            }
+        );
     }
 }
 
