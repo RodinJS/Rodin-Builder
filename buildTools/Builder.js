@@ -132,6 +132,8 @@ class Builder {
 
                 this.logger.info('Error while sending hook');
                 this.logger.info(err);
+                this.logger.info(response.statusCode);
+                this.logger.info(body);
             }
         );
     }
