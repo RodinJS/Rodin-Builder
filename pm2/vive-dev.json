@@ -3,5 +3,5 @@
   "script"      : "app.js",
   "instances"   : "1",
   "exec_mode"   : "cluster",
-  "args"        : ["--env dev", "--vive", "-p 10003"]
+  "args"        : ["--env=dev", "--vive", "-p 10003"]
 }

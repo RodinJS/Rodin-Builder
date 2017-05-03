@@ -1,5 +1,5 @@
 {
   "name"        : "builder ios development",
   "script"      : "app.js",
-  "args"        : ["--ios", "-p 10000"]
+  "args"        : ["--env=dev", "--ios", "-p 10000"]
 }
