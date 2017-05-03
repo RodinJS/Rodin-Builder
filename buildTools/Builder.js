@@ -130,8 +130,8 @@ class Builder {
                     this.logger.info('Hook sent')
                 }
 
-                this.logger.info({err: err, statusCode: response.statusCode, body: body});
                 this.logger.info('Error while sending hook');
+                this.logger.info(err);
             }
         );
     }
