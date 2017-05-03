@@ -2,6 +2,7 @@ const request = require('request');
 const configs = require('../config/config');
 
 module.exports = (app, cb) => {
+    console.log('sending to ', `${configs.binSender.url[configs.envirement.mode()]}/${app.appId}/${configs.platform}`);
     request(
         {
             method: 'POST',
