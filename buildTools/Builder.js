@@ -109,13 +109,14 @@ class Builder {
     sendHook (cb) {
         cb();
 
-        this.logger.info("Sending hook");
+        const uri = `${configs.binSender.url[configs.envirement.mode()]}/${this.project.appId}/${configs.platform}`
+        this.logger.info(`Sending hook to ${uri}`);
         request(
             {
                 method: 'POST',
                 preambleCRLF: true,
                 postambleCRLF: true,
-                uri: `${configs.binSender.url[configs.envirement.mode()]}/${this.project.appId}/${configs.platform}`,
+                uri: uri,
                 json: {
                     buildId: this.project.buildId,
                     buildStatus: this.project.built,
