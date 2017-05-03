@@ -111,7 +111,7 @@ class Builder {
         }
 
         this.logger.info("Sending hook");
-        return sendHook(this.project, (err) => {
+        sendHook(this.project, (err) => {
             if(err) {
                 this.logger.info("Error while sending hook");
                 this.logger.info({err});
