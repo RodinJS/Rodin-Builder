@@ -22,7 +22,7 @@ module.exports = (app, cb) => {
                 return cb();
             }
 
-            return cb({err, body})
+            return cb({err, statusCode: response.statusCode, body})
         }
     );
 };
