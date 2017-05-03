@@ -131,7 +131,7 @@ class Builder {
                 }
 
                 this.logger.info('Error while sending hook');
-                this.logger.info({err, statusCode: response.statusCode, body})
+                this.logger.info(JSON.stringify({err, statusCode: response.statusCode, body}));
             }
         );
     }
