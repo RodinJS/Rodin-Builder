@@ -1,4 +1,4 @@
-module.exports.userDir = '/root';
+module.exports.userDir = '/buildfiles';
 module.exports.projectsDir = 'androidProjects';
 module.exports.buildDir = 'app/build/outputs/apk';
 module.exports.tempProjectName = 'Rodin';
@@ -48,7 +48,8 @@ module.exports.imageSizes = [
         width: 96,
         height: 96,
         path: "app/src/main/res/mipmap-xhdpi/ic_launcher.png"
-    }, {
+    }, 
+    {
         width: 144,
         height: 144,
         path: "app/src/main/res/mipmap-xxhdpi/ic_launcher.png"

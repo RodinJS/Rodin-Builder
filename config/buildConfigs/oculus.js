@@ -1,4 +1,4 @@
-module.exports.userDir = '/root';
+module.exports.userDir = '/buildfiles';
 module.exports.projectsDir = 'oculusProjects';
 module.exports.buildDir = '/';
 module.exports.tempProjectName = 'Rodin';
