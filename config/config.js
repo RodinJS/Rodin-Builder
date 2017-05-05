@@ -1,10 +1,11 @@
-module.exports.envirement = require('./envirement');
+const envirement = require('./envirement');
+module.exports.envirement = envirement;
 
 module.exports.setup = function (_platform) {
     module.exports.platform = _platform;
     module.exports.server = require('./server');
     module.exports.log = require('./log');
-    module.exports.db = require('./db')(_platform, envirement);
+    module.exports.db = require('./db')(_platform, envirement.mode());
     module.exports.builder = require(`./buildConfigs/${_platform}`);
 };
 
