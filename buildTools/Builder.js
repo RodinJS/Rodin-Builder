@@ -121,7 +121,7 @@ class Builder {
                 json: {
                     buildId: this.project.buildId,
                     buildStatus: this.project.built,
-                    error: this.project.errors
+                    error: this.project.error
                 },
                 headers: {
                     'x-access-token': configs.binSender.token
