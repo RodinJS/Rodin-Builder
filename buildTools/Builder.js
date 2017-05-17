@@ -106,7 +106,7 @@ class Builder {
         return iconProcess(this.project)(cb);
     }
 
-    sendHook (/*cb*/) {
+    sendHook (/*cb*/err) {
         // cb();
 
         this.logger.info(configs.envirement.mode());
@@ -121,7 +121,7 @@ class Builder {
                 json: {
                     buildId: this.project.buildId,
                     buildStatus: this.project.built,
-                    error: this.project.error
+                    error: err
                 },
                 headers: {
                     'x-access-token': configs.binSender.token

@@ -45,7 +45,7 @@ class BuilderQueue {
             err => {
                 this.busy = false;
 
-                builder.sendHook();
+                builder.sendHook(err);
                 
                 const updateQuery = {
                     $set: {}
