@@ -106,8 +106,8 @@ class Builder {
         return iconProcess(this.project)(cb);
     }
 
-    sendHook (cb) {
-        cb();
+    sendHook (/*cb*/) {
+        // cb();
 
         this.logger.info(configs.envirement.mode());
         const uri = `${configs.binSender.url[configs.envirement.mode()]}/${this.project.appId}/${configs.platform}`
