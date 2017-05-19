@@ -31,7 +31,7 @@ module.exports = project => cb => {
         (imageSize, innerCb) => {
             resizeImage(image.path, path.join(project.projectPath, imageSize.path), imageSize.width, imageSize.height, err => {
                 if (!err) {
-                    console.log("icon success");
+                    // console.log("icon success");
                 }
                 return innerCb(err);
             })

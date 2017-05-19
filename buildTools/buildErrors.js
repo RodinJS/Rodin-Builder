@@ -66,6 +66,12 @@ class CertImportError extends CustomError {
     }
 }
 
+class ProfileContentError extends CustomError {
+    constructor() {
+        super('PROFILECONTENTERROR', 'setupbuild');
+    }
+}
+
 module.exports.FileReadError = FileReadError;
 module.exports.FileWriteError = FileWriteError;
 module.exports.MKDIRError = MKDIRError;
@@ -75,3 +81,4 @@ module.exports.RMError = RMError;
 module.exports.BuildError = BuildError;
 module.exports.CleanError = CleanError;
 module.exports.CertImportError = CertImportError;
+module.exports.ProfileContentError = ProfileContentError;

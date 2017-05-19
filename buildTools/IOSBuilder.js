@@ -64,9 +64,15 @@ class IOSBuilder extends Builder {
                         let uuidRegExp = new RegExp(configs.builder.uuidRegExp);
                         let uuNameRegExp = new RegExp(configs.builder.uuNameRegExp);
                         let uuDevelopmentTeamRegExp = new RegExp(configs.builder.uuDevelopmentTeamRegExp);
-                        project.ios.uuid = uuidRegExp.exec(content)[1];
-                        project.ios.uuName = uuNameRegExp.exec(content)[1];
-                        project.ios.uuDevelopmentTeam = uuDevelopmentTeamRegExp.exec(content)[1];
+                        try {
+                            project.ios.uuid = uuidRegExp.exec(content)[1];
+                            project.ios.uuName = uuNameRegExp.exec(content)[1];
+                            project.ios.uuDevelopmentTeam = uuDevelopmentTeamRegExp.exec(content)[1];
+                        } catch (ex) {
+                            this.logger.info('Profile Content error');
+                            this.logger.info(err);
+                            return done(new errors.ProfileContentError());
+                        }
 
                         const newPath = path.join(path.join(configs.builder.userDir, configs.builder.libDir), project.ios.uuid + '.mobileprovision');
                         fs.copy(profile.path, newPath, err => {
