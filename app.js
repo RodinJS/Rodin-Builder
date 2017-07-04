@@ -2,7 +2,6 @@ const minimist = require('minimist');
 
 let platform = "";
 const argv = minimist(process.argv.slice(2));
-console.log('argv', argv);
 global.env = argv['env'];
 
 const configs = require('./config/config');
@@ -51,7 +50,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(express.static(path.join(__dirname + '/public')));
 
-if (configs.envirement.development) {
+if (configs.envirement.development || configs.envirement.testing) {
     app.use(morgan("dev"));
 }
 
@@ -76,7 +75,7 @@ async.parallel(
         require("./routes/setupRoutes")(app);
         const port = argv['p'] || configs.server.port;
         app.listen(port, '0.0.0.0', () => {
-            console.log(`Server running on port ${port}`);
+            console.log(`Server running on port ${port}. Env: ${argv['env']}`);
         });
     }
 );

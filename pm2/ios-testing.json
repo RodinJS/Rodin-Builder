@@ -1,0 +1,5 @@
+{
+  "name"        : "builder ios testing",
+  "script"      : "app.js",
+  "args"        : ["--env=testing", "--ios", "-p 12000"]
+}

@@ -12,6 +12,8 @@ module.exports.setup = function (_platform) {
 module.exports.binSender = {
     url: {
         dev: 'https://api.rodin.space/api/hooks/build',
+        stage: 'https://api.rodin.desig/api/hooks/build',
+        testing: 'https://api.rodinapp.com/api/hooks/build',
         prod: 'https://api.rodin.io/api/hooks/build'
     },
     token: 'K7rd6FzEZwzcc6dQr3cv9kz4tTTZzAc9hdXYJpukvEnxmbdB42V4b6HePs5ZDTYLW_4000dram'

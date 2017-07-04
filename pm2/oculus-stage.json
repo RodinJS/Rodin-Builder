@@ -1,0 +1,7 @@
+{
+  "name"        : "builder oculus stage",
+  "script"      : "app.js",
+  "instances"   : "1",
+  "exec_mode"   : "cluster",
+  "args"        : ["--env=stage", "--oculus", "-p 11002"]
+}

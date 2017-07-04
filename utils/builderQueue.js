@@ -1,23 +1,23 @@
 const async = require('async');
 const path = require('path');
 const buildTools = require(`../buildTools`);
+const config = require('../config/config');
 
 const MongoConnection = require('../mongoose/connection');
 const UserApp = MongoConnection.model('UserApp');
 
 
 class BuilderQueue {
-    constructor() {
+    constructor(maxProcesses = config.builder.maxProcesses) {
         this.queue = [];
         this.busy = false;
+        this.maxProcesses = maxProcesses;
+        this.runningProcesses = 0;
+        this.currents = {};
     }
 
-    length() {
+    get length() {
         return this.queue.length
-    }
-
-    isEmpty() {
-        return this.length() === 0;
     }
 
     deQueue() {
@@ -25,10 +25,10 @@ class BuilderQueue {
     }
 
     build(project) {
-        this.busy = true;
-        this.current = project;
+        this.runningProcesses++;
+        this.currents[project.appId] = project;
 
-        const builder = buildTools.createInstance(this.current);
+        const builder = buildTools.createInstance(project);
 
         async.series(
             [
@@ -40,13 +40,10 @@ class BuilderQueue {
                 builder.iconProcess.bind(builder),
                 builder.build.bind(builder),
                 builder.rename.bind(builder),
-                // builder.sendHook.bind(builder)
             ],
             err => {
-                this.busy = false;
-
                 builder.sendHook(err);
-                
+
                 const updateQuery = {
                     $set: {}
                 };
@@ -74,11 +71,15 @@ class BuilderQueue {
                 UserApp.findByIdAndUpdate(project._id,
                     updateQuery,
                     err => {
-                        if(!err) {
-                            delete this.current;
-                        }
+                        if (err)
+                            builder.logger.info(`Project save error ${err}`);
+                        else
+                            builder.logger.info(`Project save success`);
 
-                        if (!this.isEmpty()) {
+                        this.runningProcesses--;
+                        delete this.currents[project.appId];
+
+                        if (this.runningProcesses < this.maxProcesses) {
                             this.build(this.deQueue());
                         }
                     }
@@ -88,13 +89,12 @@ class BuilderQueue {
     }
 
     requestBuild(project, cb) {
-        if (this.isEmpty() && !this.busy) {
+        if (this.runningProcesses < this.maxProcesses)
             this.build(project);
-        } else {
+        else
             this.queue.push(project);
-        }
 
-        return cb(null, {prev: this.queue.length});
+        return cb(null, {prev: this.length});
     }
 
     removeByBuildID(appId) {

@@ -1,0 +1,7 @@
+{
+  "name"        : "builder vive stage",
+  "script"      : "app.js",
+  "instances"   : "1",
+  "exec_mode"   : "cluster",
+  "args"        : ["--env=stage", "--vive", "-p 11003"]
+}

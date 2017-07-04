@@ -3,5 +3,5 @@
   "script"      : "app.js",
   "instances"   : "1",
   "exec_mode"   : "cluster",
-  "args"        : ["--android", "-p 9001"]
+  "args"        : ["--env=prod", "--android", "-p 9001"]
 }

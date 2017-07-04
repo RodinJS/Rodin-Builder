@@ -1,0 +1,7 @@
+{
+  "name"        : "builder android stage",
+  "script"      : "app.js",
+  "instances"   : "1",
+  "exec_mode"   : "cluster",
+  "args"        : ["--env=stage", "--android", "-p 11001"]
+}

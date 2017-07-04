@@ -1,0 +1,7 @@
+{
+  "name"        : "builder vive testing",
+  "script"      : "app.js",
+  "instances"   : "1",
+  "exec_mode"   : "cluster",
+  "args"        : ["--env=testing", "--vive", "-p 12003"]
+}

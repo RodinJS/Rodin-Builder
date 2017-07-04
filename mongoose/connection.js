@@ -5,7 +5,7 @@ mongoose.Promise = global.Promise;
 const db = mongoose.createConnection(configs.db.url);
 
 db.on('connected', () => {
-    console.log(`mongoose "eyme" db connected`);
+    console.log(`mongoose db connected`);
 });
 
 db.once('open', () => {

@@ -10,3 +10,5 @@ module.exports.imageSizes = [];
 module.exports.cron = {
     binSender: "* * * * *"
 };
+
+module.exports.maxProcesses = 10;

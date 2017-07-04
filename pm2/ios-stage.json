@@ -1,0 +1,5 @@
+{
+  "name"        : "builder ios stage",
+  "script"      : "app.js",
+  "args"        : ["--env=prod", "--ios", "-p 11000"]
+}

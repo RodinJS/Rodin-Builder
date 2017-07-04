@@ -98,6 +98,9 @@ module.exports.imageSizes = [
         path: "Rodin/Assets.xcassets/AppIcon.appiconset/ipad_83_5_2x.png"
     }
 ];
+
 module.exports.cron = {
     binSender: "* * * * *"
 };
+
+module.exports.maxProcesses = 1;
