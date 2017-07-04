@@ -79,7 +79,7 @@ class BuilderQueue {
                         this.runningProcesses--;
                         delete this.currents[project.appId];
 
-                        if (this.runningProcesses < this.maxProcesses) {
+                        if (this.runningProcesses < this.maxProcesses && this.length > 0) {
                             this.build(this.deQueue());
                         }
                     }
@@ -98,10 +98,10 @@ class BuilderQueue {
     }
 
     removeByBuildID(appId) {
-        if (this.current && this.current.appId === appId) {
-            this.current.canceled = true;
-            return true;
-        }
+        // if (this.current && this.current.appId === appId) {
+        //     this.current.canceled = true;
+        //     return true;
+        // }
 
         for (let i = 0; i < this.queue.length; i++) {
             if (this.queue[i].appId === appId) {
