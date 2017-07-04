@@ -1,5 +1,6 @@
 const argv = require('minimist')(process.argv.slice(2));
 const configs = require('../config/config');
+global.env = argv['env'];
 
 let platform = "";
 
@@ -10,6 +11,10 @@ switch (true) {
 
     case argv['android']:
         platform = "android";
+        break;
+
+    case argv['daydream']:
+        platform = "daydream";
         break;
 
     case argv['oculus']:
