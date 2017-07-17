@@ -10,7 +10,6 @@ const UserApp = MongoConnection.model('UserApp');
 class BuilderQueue {
     constructor(maxProcesses = config.builder.maxProcesses) {
         this.queue = [];
-        this.busy = false;
         this.maxProcesses = maxProcesses;
         this.runningProcesses = 0;
         this.currents = {};
@@ -26,7 +25,7 @@ class BuilderQueue {
 
     build(project) {
         this.runningProcesses++;
-        this.currents[project.appId] = project;
+        this.currents[project.buildId] = project;
 
         const builder = buildTools.createInstance(project);
 
@@ -98,16 +97,15 @@ class BuilderQueue {
     }
 
     removeByBuildID(appId) {
-        // if (this.current && this.current.appId === appId) {
-        //     this.current.canceled = true;
-        //     return true;
-        // }
-
         for (let i = 0; i < this.queue.length; i++) {
             if (this.queue[i].appId === appId) {
                 this.queue.splice(i, 1);
                 return true;
             }
+        }
+
+        if(this.currents[appId]) {
+            this.currents[appId].canceled = true;
         }
 
         return false;

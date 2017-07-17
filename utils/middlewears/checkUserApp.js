@@ -10,7 +10,7 @@ module.exports = {
     cancel: cancel
 };
 
-function cancel (req, res, next) {
+function cancel(req, res, next) {
     const emitter = new Emitter(req, res);
     console.log('mtav');
 
@@ -24,20 +24,17 @@ function cancel (req, res, next) {
         return emitter.sendError(new CustomErrors.InvalidRequestData());
     }
 
-    UserApp.findOne(
-        {
-            userId: project.userId,
-            appId: project.appId
-        },
-        (err, userApp) => {
-            if (err) {
-                return emitter.sendError(new CustomErrors.InvalidRequestData());
-            }
-
-            req.userApp = userApp;
-            return next();
+    UserApp.find({
+        userId: project.userId,
+        appId: project.appId
+    }).sort({_id: -1}).limit(1).exec((err, userApps) => {
+        if (err || userApps.length === 0) {
+            return emitter.sendError(new CustomErrors.InvalidRequestData());
         }
-    )
+
+        req.userApp = userApps[0];
+        return next();
+    })
 }
 
 function build(req, res, next) {

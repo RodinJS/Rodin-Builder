@@ -147,7 +147,7 @@ router.post('/', checkUserApp.build, (req, res) => {
 router.delete('/', checkUserApp.cancel, (req, res) => {
     const emitter = new Emitter(req, res);
 
-    if (builderQueue.removeByBuildID(req.userApp.appId)) {
+    if (builderQueue.removeByBuildID(req.userApp.buildId)) {
         return emitter.sendData('removed');
     }
 
