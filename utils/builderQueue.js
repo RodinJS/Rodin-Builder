@@ -76,7 +76,7 @@ class BuilderQueue {
                             builder.logger.info(`Project save success`);
 
                         this.runningProcesses--;
-                        delete this.currents[project.appId];
+                        delete this.currents[project.buildId];
 
                         if (this.runningProcesses < this.maxProcesses && this.length > 0) {
                             this.build(this.deQueue());
@@ -96,16 +96,16 @@ class BuilderQueue {
         return cb(null, {prev: this.length});
     }
 
-    removeByBuildID(appId) {
+    removeByBuildID(buildId) {
         for (let i = 0; i < this.queue.length; i++) {
-            if (this.queue[i].appId === appId) {
+            if (this.queue[i].buildId === buildId) {
                 this.queue.splice(i, 1);
                 return true;
             }
         }
 
-        if(this.currents[appId]) {
-            this.currents[appId].canceled = true;
+        if(this.currents[buildId]) {
+            this.currents[buildId].canceled = true;
         }
 
         return false;
