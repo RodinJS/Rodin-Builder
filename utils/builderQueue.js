@@ -106,6 +106,7 @@ class BuilderQueue {
 
         if(this.currents[buildId]) {
             this.currents[buildId].canceled = true;
+            return true;
         }
 
         return false;

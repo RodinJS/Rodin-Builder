@@ -12,7 +12,6 @@ module.exports = {
 
 function cancel(req, res, next) {
     const emitter = new Emitter(req, res);
-    console.log('mtav');
 
     if (!req.body.project) {
         return emitter.sendError(new CustomErrors.InvalidRequestData());
