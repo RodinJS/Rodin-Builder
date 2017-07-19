@@ -24,6 +24,12 @@ module.exports.InvalidRequestData = class InvalidRequestData extends ResponseErr
     }
 };
 
+module.exports.BuildNotExists = class BuildNotExists extends ResponseError {
+    constructor() {
+        super(`Bad Request`, 400, `Build request not found`);
+    }
+};
+
 module.exports.InvalidBuildId = class InvalidBuildId extends ResponseError {
     constructor() {
         super(`Bad Request`, 400, `Invalid build id`);

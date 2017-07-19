@@ -151,7 +151,7 @@ router.delete('/', checkUserApp.cancel, (req, res) => {
         return emitter.sendData('removed');
     }
 
-    return emitter.sendError(new CustomErrors.InvalidRequestData());
+    return emitter.sendError(new CustomErrors.BuildNotExists());
 });
 
 module.exports = router;
