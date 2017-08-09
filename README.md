@@ -1,5 +1,7 @@
 # Rodin Builder
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/RodinJS/Rodin-Builder.svg?token=56bebeb7066b0ad3b17f55e288c149b292a41b42059930c9cb8450195d700296&ts=1502272746314)](https://greenkeeper.io/)
+
 ## API
 
 Check api documentation [here](http://45.55.92.49:8001/apidoc/)
