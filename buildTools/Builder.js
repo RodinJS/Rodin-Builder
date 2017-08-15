@@ -115,12 +115,14 @@ class Builder {
         let json;
         if (err && err.message) {
             json = {
+                buildId: this.project.buildId,
                 buildStatus: false,
                 error: err,
                 project: this.project
             }
         } else {
             json = {
+                buildId: this.project.buildId,
                 pending: !this.project.built,
                 buildStatus: this.project.built,
                 project: this.project
