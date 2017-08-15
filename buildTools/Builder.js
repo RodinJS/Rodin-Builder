@@ -8,12 +8,12 @@ const Logger = require("../logger/Logger");
 const sendHook = require('../utils/sendHook');
 
 class Builder {
-    constructor (project) {
+    constructor(project) {
         this.project = project;
         this.logger = new Logger(`builds/${configs.platform}/${this.project.buildId}.log`, false);
     }
 
-    init (cb) {
+    init(cb) {
         const project = this.project;
         this.logger.info('Build start');
         this.logger.info(project);
@@ -49,7 +49,7 @@ class Builder {
         });
     };
 
-    copyTemplate (cb) {
+    copyTemplate(cb) {
         const project = this.project;
         if (project.canceled)
             return cb('cancelled');
@@ -65,23 +65,23 @@ class Builder {
         });
     };
 
-    clean (cb) {
+    clean(cb) {
         return cb();
     }
 
-    setupBuild (cb) {
+    setupBuild(cb) {
         return cb();
     }
 
-    setupProject (cb) {
+    setupProject(cb) {
         return cb();
     }
 
-    build (cb) {
+    build(cb) {
         return cb();
     }
 
-    rename (cb) {
+    rename(cb) {
         const project = this.project;
         if (project.canceled)
             return cb('cancelled');
@@ -98,7 +98,7 @@ class Builder {
         });
     }
 
-    iconProcess (cb) {
+    iconProcess(cb) {
         const project = this.project;
         if (project.canceled)
             return cb('cancelled');
@@ -106,11 +106,27 @@ class Builder {
         return iconProcess(this.project)(cb);
     }
 
-    sendHook (/*cb*/err) {
+    sendHook(err) {
         // cb();
 
         this.logger.info(configs.envirement.mode());
-        const uri = `${configs.binSender.url[configs.envirement.mode()]}/${this.project.appId}/${configs.platform}`
+        const uri = `${configs.binSender.url[configs.envirement.mode()]}/${this.project.appId}/${configs.platform}`;
+
+        let json;
+        if (err && err.message) {
+            json = {
+                buildStatus: false,
+                error: err,
+                project: this.project
+            }
+        } else {
+            json = {
+                pending: !this.project.built,
+                buildStatus: this.project.built,
+                project: this.project
+            }
+        }
+
         this.logger.info(`Sending hook to ${uri}`);
         request(
             {
@@ -118,12 +134,7 @@ class Builder {
                 preambleCRLF: true,
                 postambleCRLF: true,
                 uri: uri,
-                json: {
-                    buildId: this.project.buildId,
-                    buildStatus: this.project.built,
-                    error: err,
-                    project: this.project
-                },
+                json: json,
                 headers: {
                     'x-access-token': configs.binSender.token
                 }
